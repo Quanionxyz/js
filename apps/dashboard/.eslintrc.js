@@ -186,12 +186,6 @@ module.exports = {
   },
   overrides: [
     {
-      files: "src/app/**/*",
-      rules: {
-        "react/forbid-dom-props": ["off", { forbid: ["className"] }],
-      },
-    },
-    {
       files: "src/core-ui/**/*",
       rules: {
         // no restricted imports
