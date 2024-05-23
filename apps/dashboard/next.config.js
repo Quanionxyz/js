@@ -161,8 +161,8 @@ const { withSentryConfig } = require("@sentry/nextjs");
 const { withPlausibleProxy } = require("next-plausible");
 
 // we only want sentry on production environments
-// const wSentry =
-//   process.env.NODE_ENV === "production" ? withSentryConfig : (x) => x;
+const wSentry =
+  process.env.NODE_ENV === "production" ? withSentryConfig : (x) => x;
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
