@@ -1,10 +1,13 @@
-import chakraTheme from "../theme";
+import "@/styles/globals.css";
 import { ChakraProvider, useColorMode } from "@chakra-ui/react";
 import { Global, css } from "@emotion/react";
 import type { DehydratedState } from "@tanstack/react-query";
+import { AnnouncementBanner } from "components/notices/AnnouncementBanner";
 import { ProgressBar } from "components/shared/ProgressBar";
+import { useBuildId } from "hooks/useBuildId";
 import PlausibleProvider from "next-plausible";
 import { DefaultSeo } from "next-seo";
+import { useTheme } from "next-themes";
 import type { AppProps } from "next/app";
 import {
   IBM_Plex_Mono as ibmPlexMonoConstructor,
@@ -12,17 +15,14 @@ import {
 } from "next/font/google";
 import { useRouter } from "next/router";
 import { PageId } from "page-id";
-import posthogOpenSource from "posthog-js-opensource";
 import posthogCloud from "posthog-js";
+import posthogOpenSource from "posthog-js-opensource";
 import { memo, useEffect, useMemo, useRef } from "react";
 import { generateBreakpointTypographyCssVars } from "tw-components/utils/typography";
 import type { ThirdwebNextPage } from "utils/types";
-import "../css/swagger-ui.css";
-import { AnnouncementBanner } from "components/notices/AnnouncementBanner";
-import { useBuildId } from "hooks/useBuildId";
-import "@/styles/globals.css";
 import { ThemeProvider } from "../@/components/theme-provider";
-import { useTheme } from "next-themes";
+import "../css/swagger-ui.css";
+import chakraTheme from "../theme";
 
 const inter = interConstructor({
   subsets: ["latin"],
