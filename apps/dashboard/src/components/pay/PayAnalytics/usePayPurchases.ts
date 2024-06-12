@@ -1,54 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLoggedInUser } from "../../../@3rdweb-sdk/react/hooks/useLoggedInUser";
 
-type AggregatedData = {
-  succeeded: number;
-  failed: number;
-  bpsIncreaseFromPriorRange: number;
-};
-
-export type PayVolumeData = {
-  intervalType: "day" | "week";
-  intervalResults: Array<{
-    interval: string;
-    buyWithCrypto: {
-      succeeded: number;
-      failed: number;
-    };
-    buyWithFiat: {
-      succeeded: number;
-      failed: number;
-    };
-    sum: {
-      succeeded: number;
-      failed: number;
-    };
-    payouts: {
-      succeeded: number;
-    };
+export type PayPurchasesData = {
+  count: number;
+  purchases: Array<{
+    createdAt: string;
+    estimatedFeesUSDCents: number;
+    fromAmountUSDCents: number;
+    fromAmountWei: string;
+    fromChainId: number;
+    fromCurrencyDecimals: number;
+    fromCurrencySymbol: string;
+    fromTokenAddress: string;
+    purchaseId: string;
+    purchaseType: "ONRAMP" | "SWAP";
+    status: "COMPLETED" | "FAILED" | "PENDING";
+    toAddress: string;
+    toAmountUSDCents: number;
+    toAmountWei: string;
+    toChainId: number;
+    toTokenAddress: string;
+    updatedAt: string;
   }>;
-  aggregate: {
-    buyWithCrypto: AggregatedData;
-    buyWithFiat: AggregatedData;
-    sum: AggregatedData;
-    payouts: {
-      succeeded: number;
-      bpsIncreaseFromPriorRange: number;
-    };
-  };
 };
 
 type Response = {
   result: {
-    data: PayVolumeData;
+    data: PayPurchasesData;
   };
 };
 
-export function usePayVolume(options: {
+export function usePayPurchases(options: {
   clientId: string;
   from: Date;
   to: Date;
-  intervalType: "day" | "week";
+  skip: number;
+  take: number;
 }) {
   const { user, isLoggedIn } = useLoggedInUser();
 
@@ -56,9 +43,11 @@ export function usePayVolume(options: {
     ["pay-volume", user?.address, options],
     async () => {
       const endpoint = new URL(
-        "https://pay.thirdweb-dev.com/stats/aggregate/volume/v1",
+        "https://pay.thirdweb-dev.com/stats/purchases/v1",
       );
-      endpoint.searchParams.append("intervalType", options.intervalType);
+      endpoint.searchParams.append("skip", `${options.skip}`);
+      endpoint.searchParams.append("take", `${options.take}`);
+
       endpoint.searchParams.append("clientId", options.clientId);
       endpoint.searchParams.append("fromDate", `${options.from.getTime()}`);
       endpoint.searchParams.append("toDate", `${options.to.getTime()}`);
