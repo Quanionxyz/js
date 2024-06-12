@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CircleAlertIcon, TicketCheckIcon } from "lucide-react";
 import Link from "next/link";
-import { ChainSupportedService } from "../../../types/chain";
 import { ChainIcon } from "../../../components/server/chain-icon";
+import { ChainSupportedService } from "../../../types/chain";
 import { getChainMetadata } from "../../../utils";
 
 type ChainListCardProps = {
