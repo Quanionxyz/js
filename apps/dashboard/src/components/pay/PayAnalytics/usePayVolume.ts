@@ -1,29 +1,56 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLoggedInUser } from "../../../@3rdweb-sdk/react/hooks/useLoggedInUser";
 
-export type PayNewCustomersData = {
+export type PayVolumeData = {
   intervalType: "day" | "week";
   intervalResults: Array<{
-    /**
-     * Date formatted in ISO 8601 format
-     */
     interval: string;
-    distinctCustomers: number;
+    buyWithCrypto: {
+      succeded: number;
+      failed: number;
+    };
+    buyWithFiat: {
+      succeded: number;
+      failed: number;
+    };
+    sum: {
+      succeeded: number;
+      failed: number;
+    };
+    payouts: {
+      succeded: number;
+    };
   }>;
   aggregate: {
-    // totals in the [fromDate, toDate] range
-    distinctCustomers: number;
-    bpsIncreaseFromPriorRange: number;
+    buyWithCrypto: {
+      succeded: number;
+      failed: number;
+      bpsIncreaseFromPriorRange: number;
+    };
+    buyWithFiat: {
+      succeded: number;
+      failed: number;
+      bpsIncreaseFromPriorRange: number;
+    };
+    sum: {
+      succeeded: number;
+      failed: number;
+      bpsIncreaseFromPriorRange: number;
+    };
+    payouts: {
+      succeded: number;
+      bpsIncreaseFromPriorRange: number;
+    };
   };
 };
 
 type Response = {
   result: {
-    data: PayNewCustomersData;
+    data: PayVolumeData;
   };
 };
 
-export function usePayNewCustomers(options: {
+export function usePayVolume(options: {
   clientId: string;
   from: Date;
   to: Date;
@@ -32,10 +59,10 @@ export function usePayNewCustomers(options: {
   const { user, isLoggedIn } = useLoggedInUser();
 
   return useQuery(
-    ["pay-new-customers", user?.address, options],
+    ["pay-volume", user?.address, options],
     async () => {
       const endpoint = new URL(
-        "https://pay.thirdweb-dev.com/stats/aggregate/customers/v1",
+        "https://pay.thirdweb-dev.com/stats/aggregate/volume/v1",
       );
       endpoint.searchParams.append("intervalType", options.intervalType);
       endpoint.searchParams.append("clientId", options.clientId);
@@ -51,11 +78,10 @@ export function usePayNewCustomers(options: {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to fetch new customers");
+        throw new Error("Failed to fetch pay volume");
       }
 
       const resJSON = (await res.json()) as Response;
-
       return resJSON.result.data;
     },
     { enabled: !!user?.address && isLoggedIn },
