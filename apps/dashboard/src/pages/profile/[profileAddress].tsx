@@ -6,7 +6,6 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { Polygon } from "@thirdweb-dev/chains";
-import { useAddress } from "@thirdweb-dev/react/evm";
 import { AppLayout } from "components/app-layouts/app";
 import {
   ensQuery,
@@ -32,6 +31,7 @@ import { useRouter } from "next/router";
 import { ProfileOG } from "og-lib/url-utils";
 import { PageId } from "page-id";
 import { useEffect, useMemo } from "react";
+import { useActiveAccount } from "thirdweb/react";
 import { Heading, Text } from "tw-components";
 import { getSingleQueryValue } from "utils/router";
 import type { ThirdwebNextPage } from "utils/types";
@@ -64,24 +64,24 @@ const UserPage: ThirdwebNextPage = (props: UserPageProps) => {
   const publisherProfile = usePublisherProfile(ens.data?.address || undefined);
 
   const displayName = shortenIfAddress(
-    ens?.data?.ensName || props.profileAddress
+    ens?.data?.ensName || props.profileAddress,
   ).replace("deployer.thirdweb.eth", "thirdweb.eth");
 
   const currentRoute = `${THIRDWEB_DOMAIN}${router.asPath}`.replace(
     "deployer.thirdweb.eth",
-    "thirdweb.eth"
+    "thirdweb.eth",
   );
 
   const publishedContracts = usePublishedContractsQuery(
-    ens.data?.address || undefined
+    ens.data?.address || undefined,
   );
 
   const mainnetsContractList = useAllContractList(
     ens.data?.address || props.profileAddress,
-    { onlyMainnet: true }
+    { onlyMainnet: true },
   );
 
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
 
   const ogImage = useMemo(() => {
     if (!publisherProfile.data || !publishedContracts.data) {
@@ -224,13 +224,13 @@ export const getStaticProps: GetStaticProps<UserPageProps> = async (ctx) => {
 
   const polygonSdk = getThirdwebSDK(
     Polygon.chainId,
-    getDashboardChainRpc(Polygon)
+    getDashboardChainRpc(Polygon),
   );
 
   const profileAddress = getSingleQueryValue(
     // biome-ignore lint/suspicious/noExplicitAny: FIXME
     ctx.params as any,
-    "profileAddress"
+    "profileAddress",
   );
 
   if (!profileAddress) {
@@ -280,7 +280,7 @@ export const getStaticProps: GetStaticProps<UserPageProps> = async (ctx) => {
     ...ensQueries,
     queryClient.prefetchQuery(publisherProfileQuery(address)),
     queryClient.prefetchQuery(["published-contracts", address], () =>
-      fetchPublishedContracts(polygonSdk, queryClient, address)
+      fetchPublishedContracts(polygonSdk, queryClient, address),
     ),
   ]);
 

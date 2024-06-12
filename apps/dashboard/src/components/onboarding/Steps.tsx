@@ -14,13 +14,13 @@ import {
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useChainId } from "@thirdweb-dev/react";
 import { ChakraNextImage } from "components/Image";
 import { useTrack } from "hooks/analytics/useTrack";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import type { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
+import { useActiveWalletChain } from "thirdweb/react";
 import { Button, Card, Heading, Link, LinkButton, Text } from "tw-components";
 import { OPSponsoredChains } from "../../constants/chains";
 import { ApplyForOpCreditsModal } from "./ApplyForOpCreditsModal";
@@ -91,7 +91,7 @@ export const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
     return apiKeysQuery?.data && apiKeysQuery?.data?.length > 0;
   }, [apiKeysQuery?.data]);
 
-  const chainId = useChainId();
+  const chainId = useActiveWalletChain()?.id;
 
   const isSponsoredChain = useMemo(() => {
     if (chainId) {

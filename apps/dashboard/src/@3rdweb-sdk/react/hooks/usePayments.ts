@@ -26,7 +26,6 @@ import {
   Zora,
   ZoraTestnet,
 } from "@thirdweb-dev/chains";
-import { useAddress } from "@thirdweb-dev/react";
 import type { Abi, FeatureName, SmartContract } from "@thirdweb-dev/sdk";
 import { detectFeatures } from "components/contract-components/utils";
 import { CURRENCIES, type CurrencyMetadata } from "constants/currencies";
@@ -54,6 +53,7 @@ import {
   useWebhooksBySellerIdLazyQuery,
 } from "graphql/generated";
 import { getThirdwebSDK } from "lib/sdk";
+import { useActiveAccount } from "thirdweb/react";
 import invariant from "tiny-invariant";
 import { OtherAddressZero } from "utils/zeroAddress";
 import { paymentsKeys } from "../cache-keys";
@@ -328,7 +328,7 @@ export function usePaymentsRegisterContract() {
   const { token } = useApiAuthToken();
   const fetchFromPaymentsAPI = usePaymentsApi();
   const queryClient = useQueryClient();
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
 
   return useMutationWithInvalidate(
     async (input: RegisterContractInput) => {
@@ -436,7 +436,7 @@ export function usePaymentsCreateUpdateCheckout(contractAddress: string) {
   const { token } = useApiAuthToken();
   const fetchFromPaymentsAPI = usePaymentsApi();
   const queryClient = useQueryClient();
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
 
   return useMutationWithInvalidate(
     async (input: CreateUpdateCheckoutInput) => {
@@ -470,7 +470,7 @@ export function usePaymentsRemoveCheckout(contractAddress: string) {
   const { token } = useApiAuthToken();
   const fetchFromPaymentsAPI = usePaymentsApi();
   const queryClient = useQueryClient();
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
 
   return useMutationWithInvalidate(
     async (input: RemoveCheckoutInput) => {
@@ -525,7 +525,7 @@ export function usePaymentsUploadToCloudflare() {
   const { token } = useApiAuthToken();
   const fetchFromPaymentsAPI = usePaymentsApi();
   const queryClient = useQueryClient();
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
 
   return useMutationWithInvalidate(
     async (dataBase64: string) => {
@@ -596,7 +596,7 @@ type UpdateSellerByIdInput = {
 
 export function usePaymentsUpdateSellerById(id: string) {
   const queryClient = useQueryClient();
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
 
   const [updateSellerById] = useUpdateSellerMutation({
     refetchQueries: [SellerDocument],
@@ -623,7 +623,7 @@ export function usePaymentsUpdateSellerById(id: string) {
 }
 
 export function usePaymentsEnabledContracts() {
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
   const { paymentsSellerId } = useApiAuthToken();
   const [getContractsByOwnerId] = useContractsByOwnerIdLazyQuery();
 
@@ -647,7 +647,7 @@ export function usePaymentsEnabledContracts() {
 }
 
 export function usePaymentsCheckoutsByContract(contractAddress: string) {
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
   const { paymentsSellerId } = useApiAuthToken();
   const [getCheckoutsByContractAddress] =
     useCheckoutsByContractAddressLazyQuery();
@@ -776,7 +776,7 @@ function parseAnalyticOverviewData(data: any[]): any[] {
 
 export function usePaymentsDetailedAnalytics(checkoutId: string | undefined) {
   invariant(checkoutId, "checkoutId is required");
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
   const { paymentsSellerId } = useApiAuthToken();
   const [getDetailedAnalytics] = useDetailedAnalyticsLazyQuery();
 
@@ -808,7 +808,7 @@ export function usePaymentsDetailedAnalytics(checkoutId: string | undefined) {
 
 export function usePaymentsSellerById(paymentsSellerId: string) {
   invariant(paymentsSellerId, "paymentsSellerId is required");
-  const address = useAddress();
+  const address = useActiveAccount()?.address;
   const [getSellerById] = useSellerLazyQuery();
 
   return useQuery(
