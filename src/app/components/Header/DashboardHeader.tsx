@@ -1,7 +1,7 @@
-import { ColorModeToggle } from "../../../@/components/color-mode-toggle";
-import { ThirdwebMiniLogo } from "../ThirdwebMiniLogo";
-import { CustomConnectButton } from "../../connect";
 import Link from "next/link";
+import Link from "next/link";
+import { CustomConnectButton} from "../.../connects/color-mode-toggle";
+import { ThirdwebMiniLogo } from "../ThirdwebMiniLogo from "../ThirdwebMiniLogo";
 import { MobileBurgerMenu } from "./MobileBurgerMenu";
 import { headerLinks } from "./headerLinks";
 
