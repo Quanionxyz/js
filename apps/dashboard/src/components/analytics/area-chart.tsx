@@ -1,3 +1,8 @@
+<<<<<<< HEAD:apps/dashboard/src/components/analytics/area-chart.tsx
+=======
+/* eslint-disable react/forbid-dom-props */
+import { CustomToolTip } from "./custom-tooltip";
+>>>>>>> ddec50723 (reorganize):src/components/analytics/area-chart.tsx
 import { useEffect, useId, useState } from "react";
 import {
   Area,
@@ -36,6 +41,7 @@ export interface AreaChartProps<
   showYAxis?: boolean;
   startEndOnly?: boolean;
   className?: string;
+  isAnimationActive?: boolean;
 }
 
 const AreaChart = <
@@ -49,6 +55,7 @@ const AreaChart = <
   showYAxis,
   startEndOnly,
   className,
+  isAnimationActive,
 }: AreaChartProps<TData, TIndexKey>) => {
   const id = useId();
 
@@ -101,6 +108,7 @@ const AreaChart = <
                 strokeWidth: 0,
               }}
               strokeWidth={1.5}
+              isAnimationActive={isAnimationActive}
             />
           ))}
           <Tooltip
@@ -200,8 +208,13 @@ function generateFakeData() {
   return data;
 }
 
+<<<<<<< HEAD:apps/dashboard/src/components/analytics/area-chart.tsx
 export const AreaChartLoadingState: React.FC = () => {
   const [loadingData, setLoadingData] = useState(generateFakeData());
+=======
+export const AreaChartLoadingState = (props: { height?: string }) => {
+  const [loadingData, setLoadingData] = useState(() => generateFakeData());
+>>>>>>> ddec50723 (reorganize):src/components/analytics/area-chart.tsx
 
   // legitimate use case
   // eslint-disable-next-line no-restricted-syntax
@@ -212,7 +225,12 @@ export const AreaChartLoadingState: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="relative">
+    <div
+      className="relative w-full"
+      style={{
+        height: props.height,
+      }}
+    >
       <div className="flex items-center justify-center filter backdrop-blur-sm z-10 absolute inset-0">
         <p className="text-secondary-foreground">Loading Chart</p>
       </div>
@@ -220,7 +238,8 @@ export const AreaChartLoadingState: React.FC = () => {
         className="pointer-events-none"
         data={loadingData}
         index={{ id: "key" }}
-        categories={[{ id: "value", color: "hsl(var(--muted))" }]}
+        categories={[{ id: "value", color: "hsl(var(--muted-foreground))" }]}
+        isAnimationActive={false}
       />
     </div>
   );
