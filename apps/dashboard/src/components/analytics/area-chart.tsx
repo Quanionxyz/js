@@ -1,8 +1,5 @@
-<<<<<<< HEAD:apps/dashboard/src/components/analytics/area-chart.tsx
-=======
 /* eslint-disable react/forbid-dom-props */
-import { CustomToolTip } from "./custom-tooltip";
->>>>>>> ddec50723 (reorganize):src/components/analytics/area-chart.tsx
+
 import { useEffect, useId, useState } from "react";
 import {
   Area,
@@ -206,13 +203,8 @@ function generateFakeData() {
   return data;
 }
 
-<<<<<<< HEAD:apps/dashboard/src/components/analytics/area-chart.tsx
-export const AreaChartLoadingState: React.FC = () => {
-  const [loadingData, setLoadingData] = useState(generateFakeData());
-=======
 export const AreaChartLoadingState = (props: { height?: string }) => {
   const [loadingData, setLoadingData] = useState(() => generateFakeData());
->>>>>>> ddec50723 (reorganize):src/components/analytics/area-chart.tsx
 
   // legitimate use case
   // eslint-disable-next-line no-restricted-syntax

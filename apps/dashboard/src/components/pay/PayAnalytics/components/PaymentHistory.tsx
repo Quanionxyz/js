@@ -1,9 +1,8 @@
-import { useState } from "react";
 import {
   usePayPurchases,
   type PayPurchasesData,
 } from "../hooks/usePayPurchases";
-import { CardHeading, LoadingGraph, NoDataAvailable } from "./common";
+import { CardHeading, NoDataAvailable } from "./common";
 import { CopyAddressButton } from "../../../../@/components/ui/CopyAddressButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "../../../../@/components/ui/badge";
@@ -12,32 +11,65 @@ import { format } from "date-fns";
 import { ScrollShadow } from "../../../../@/components/ui/ScrollShadow/ScrollShadow";
 import { Spinner } from "../../../../@/components/ui/Spinner/Spinner";
 import { ExportToCSVButton } from "./ExportToCSVButton";
-import { useTokenInfo } from "../hooks/useTokenInfo";
 import { Skeleton } from "../../../../@/components/ui/skeleton";
+
+type UIData = {
+  purchases: PayPurchasesData["purchases"];
+  showLoadMore: boolean;
+};
 
 export function PaymentHistory(props: {
   clientId: string;
   from: Date;
   to: Date;
 }) {
-  const [itemsToLoad, setItemsToLoad] = useState(100);
   const purchasesQuery = usePayPurchases({
     clientId: props.clientId,
     from: props.from,
     to: props.to,
-    take: itemsToLoad,
-    skip: 0,
+    pageSize: 100,
   });
+
+  function getUIData(): {
+    data?: UIData;
+    isLoading?: boolean;
+    isError?: boolean;
+  } {
+    if (purchasesQuery.isLoading) {
+      return { isLoading: true };
+    }
+    if (purchasesQuery.isError) {
+      return { isError: true };
+    }
+
+    const purchases = purchasesQuery.data.pages.flatMap(
+      (page) => page.pageData.purchases,
+    );
+
+    if (purchases.length === 0) {
+      return { isError: true };
+    }
+
+    return {
+      data: {
+        purchases,
+        showLoadMore: !!purchasesQuery.hasNextPage,
+      },
+    };
+  }
+
+  const uiData = getUIData();
+  const purchases = uiData.data?.purchases;
 
   return (
     <div>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:items-center">
         <CardHeading> Transaction History</CardHeading>
-        {purchasesQuery.data && purchasesQuery.data.purchases?.length > 0 && (
+        {purchases && (
           <ExportToCSVButton
             fileName="transaction_history"
             getData={() => {
-              return getCSVData(purchasesQuery.data.purchases);
+              return getCSVData(purchases);
             }}
           />
         )}
@@ -45,12 +77,10 @@ export function PaymentHistory(props: {
 
       <div className="h-5" />
 
-      {purchasesQuery.isLoading ? (
-        <LoadingGraph className="h-[400px]" />
-      ) : purchasesQuery.data && purchasesQuery.data.purchases.length > 0 ? (
+      {!uiData.isError ? (
         <RenderData
-          data={purchasesQuery.data}
-          loadMore={() => setItemsToLoad(itemsToLoad + 100)}
+          data={uiData.data}
+          loadMore={() => purchasesQuery.fetchNextPage()}
           isLoadingMore={purchasesQuery.isFetching}
         />
       ) : (
@@ -61,16 +91,15 @@ export function PaymentHistory(props: {
 }
 
 function RenderData(props: {
-  data: PayPurchasesData;
+  data?: UIData;
   loadMore: () => void;
   isLoadingMore: boolean;
 }) {
-  const totalItems = props.data.count;
-  const itemsLoaded = props.data.purchases.length;
-  const showLoadMore = totalItems > itemsLoaded;
-
   return (
-    <ScrollShadow scrollableClassName="max-h-[700px]" disableTopShadow={true}>
+    <ScrollShadow
+      scrollableClassName="max-h-[350px] lg:max-h-[700px]"
+      disableTopShadow={true}
+    >
       <table className="w-full">
         <thead>
           <tr className="border-b border-border sticky top-0 bg-background z-10">
@@ -84,28 +113,44 @@ function RenderData(props: {
           </tr>
         </thead>
         <tbody>
-          {props.data.purchases.map((purchase) => {
-            return <TableRow key={purchase.purchaseId} purchase={purchase} />;
-          })}
+          {props.data ? (
+            <>
+              {props.data.purchases.map((purchase) => {
+                return (
+                  <TableRow key={purchase.purchaseId} purchase={purchase} />
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {new Array(20).fill(0).map((_, i) => (
+                <SkeletonTableRow key={i} rowIndex={i} />
+              ))}
+            </>
+          )}
         </tbody>
       </table>
 
-      {showLoadMore ? (
-        <div className="flex justify-center py-3">
-          <Button
-            className="text-sm text-link-foreground p-2 h-auto gap-2 items-center"
-            variant="ghost"
-            onClick={props.loadMore}
-            disabled={props.isLoadingMore}
-          >
-            {props.isLoadingMore ? "Loading" : "View More"}
-            {props.isLoadingMore && <Spinner className="size-3" />}
-          </Button>
-        </div>
-      ) : (
-        <p className="text-center py-5 text-muted-foreground">
-          {totalItems === 0 ? "No transactions found" : "No more transactions"}
-        </p>
+      {props.data && (
+        <>
+          {props.data?.showLoadMore ? (
+            <div className="flex justify-center py-3">
+              <Button
+                className="text-sm text-link-foreground p-2 h-auto gap-2 items-center"
+                variant="ghost"
+                onClick={props.loadMore}
+                disabled={props.isLoadingMore}
+              >
+                {props.isLoadingMore ? "Loading" : "View More"}
+                {props.isLoadingMore && <Spinner className="size-3" />}
+              </Button>
+            </div>
+          ) : (
+            <p className="text-center py-5 text-muted-foreground">
+              No more transactions
+            </p>
+          )}
+        </>
       )}
     </ScrollShadow>
   );
@@ -114,18 +159,11 @@ function RenderData(props: {
 function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
   const { purchase } = props;
 
-  const fromToken = useTokenInfo({
-    chainId: purchase.fromChainId,
-    tokenAddress: purchase.fromTokenAddress,
-  });
-
-  const toToken = useTokenInfo({
-    chainId: purchase.toChainId,
-    tokenAddress: purchase.toTokenAddress,
-  });
-
   return (
-    <tr key={purchase.purchaseId} className="border-b border-border">
+    <tr
+      key={purchase.purchaseId}
+      className="border-b border-border fade-in-0 duration-300"
+    >
       {/* Amount */}
       <TableData>
         {(purchase.toAmountUSDCents / 100).toLocaleString("en-US", {
@@ -139,39 +177,25 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
         <Badge
           variant={"secondary"}
           className={cn(
-            "capitalize",
+            "uppercase",
             purchase.purchaseType === "ONRAMP"
               ? "bg-lime-200/50 dark:bg-lime-800/50 text-lime-800 dark:text-lime-200"
               : "bg-sky-200/50 dark:bg-sky-900/50 text-sky-800 dark:text-sky-200",
           )}
         >
-          {purchase.purchaseType}
+          {purchase.purchaseType === "ONRAMP" ? "Fiat" : "Crypto"}
         </Badge>
       </TableData>
 
-      {/* From */}
+      {/* Paid */}
       <TableData>
-        {purchase.purchaseType === "SWAP" ? (
-          <>
-            {fromToken.isLoading ? (
-              <Skeleton className="h-4 w-14" />
-            ) : (
-              fromToken.data?.symbol || "Failed to Load"
-            )}
-          </>
-        ) : (
-          purchase.fromCurrencySymbol
-        )}
+        {purchase.purchaseType === "SWAP"
+          ? purchase.fromToken.symbol
+          : purchase.fromCurrencySymbol}
       </TableData>
 
-      {/* To */}
-      <TableData>
-        {toToken.isLoading ? (
-          <Skeleton className="h-4 w-14" />
-        ) : (
-          toToken.data?.symbol || "Failed to Load"
-        )}
-      </TableData>
+      {/* Bought */}
+      <TableData>{purchase.toToken.symbol}</TableData>
 
       {/* Status */}
       <TableData>
@@ -200,8 +224,33 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
 
       {/* Date */}
       <TableData>
-        {format(new Date(purchase.updatedAt), "LLL dd, y h:mm a")}
+        <p className="min-w-[180px] lg:min-w-auto">
+          {format(new Date(purchase.updatedAt), "LLL dd, y h:mm a")}
+        </p>
       </TableData>
+    </tr>
+  );
+}
+
+function SkeletonTableRow(props: { rowIndex: number }) {
+  const skeleton = (
+    <Skeleton
+      className="h-7 w-20"
+      style={{
+        animationDelay: `${props.rowIndex * 0.1}s`,
+      }}
+    />
+  );
+
+  return (
+    <tr className="border-b border-border">
+      <TableData>{skeleton}</TableData>
+      <TableData>{skeleton}</TableData>
+      <TableData>{skeleton}</TableData>
+      <TableData>{skeleton}</TableData>
+      <TableData>{skeleton}</TableData>
+      <TableData>{skeleton}</TableData>
+      <TableData>{skeleton}</TableData>
     </tr>
   );
 }
@@ -226,9 +275,11 @@ function getCSVData(data: PayPurchasesData["purchases"]) {
     // to
     "Buy Token address",
     "Buy Token chain",
+    "Buy Token Symbol",
     // from
     "From Token address",
     "From Token chain",
+    "From Token Symbol",
     "From currency",
     // status
     "Recipient",
@@ -243,16 +294,19 @@ function getCSVData(data: PayPurchasesData["purchases"]) {
       style: "currency",
     }),
     // type
-    purchase.purchaseType,
+    purchase.purchaseType === "ONRAMP" ? "Fiat" : "Crypto",
     // status
     purchase.status,
     // to
-    purchase.toTokenAddress,
-    `${purchase.toChainId}`,
+    purchase.toToken.tokenAddress,
+    `${purchase.toToken.chainId}`,
+    purchase.toToken.symbol,
     // from
-    purchase.purchaseType === "SWAP" ? purchase.fromTokenAddress : "",
-    purchase.purchaseType === "SWAP" ? `${purchase.fromChainId}` : "",
+    purchase.purchaseType === "SWAP" ? purchase.fromToken.tokenAddress : "",
+    purchase.purchaseType === "SWAP" ? `${purchase.fromToken.chainId}` : "",
+    purchase.purchaseType === "SWAP" ? purchase.fromToken.symbol : "",
     purchase.purchaseType === "ONRAMP" ? purchase.fromCurrencySymbol : "",
+
     // recipient
     purchase.toAddress,
     format(new Date(purchase.updatedAt), "LLL dd y h:mm a"),
