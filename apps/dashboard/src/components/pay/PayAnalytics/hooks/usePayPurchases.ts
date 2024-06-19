@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useLoggedInUser } from "../../../../@3rdweb-sdk/react/hooks/useLoggedInUser";
+import { THIRDWEB_PAY_DOMAIN } from "../../../../constants/urls";
 
 export type PayPurchasesData = {
   count: number;
@@ -9,11 +10,12 @@ export type PayPurchasesData = {
       estimatedFeesUSDCents: number;
       fromAmountUSDCents: number;
       fromAmountWei: string;
+      fromAmountUnits: string;
 
       purchaseId: string;
 
       status: "COMPLETED" | "FAILED" | "PENDING";
-      toAddress: string;
+      fromAddress: string;
       toAmountUSDCents: number;
       toAmountWei: string;
       updatedAt: string;
@@ -62,7 +64,7 @@ export function usePayPurchases(options: {
     queryKey: ["usePayPurchases", user?.address, options],
     queryFn: async ({ pageParam = 0 }) => {
       const endpoint = new URL(
-        "https://pay.thirdweb-dev.com/stats/purchases/v1",
+        `https://${THIRDWEB_PAY_DOMAIN}/stats/purchases/v1`,
       );
 
       const start = options.pageSize * pageParam;

@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useLoggedInUser } from "../../../../@3rdweb-sdk/react/hooks/useLoggedInUser";
+import { THIRDWEB_PAY_DOMAIN } from "../../../../constants/urls";
 
 export type PayTopCustomersData = {
   count: number;
@@ -27,7 +28,7 @@ export function usePayTopCustomers(options: {
     queryKey: ["usePayTopCustomers", user?.address, options],
     queryFn: async ({ pageParam = 0 }) => {
       const endpoint = new URL(
-        "https://pay.thirdweb-dev.com/stats/customers/v1",
+        `https://${THIRDWEB_PAY_DOMAIN}/stats/customers/v1`,
       );
 
       const start = options.pageSize * pageParam;

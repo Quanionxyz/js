@@ -10,3 +10,6 @@ export const THIRDWEB_EWS_API_HOST =
 export const THIRDWEB_PAYMENTS_API_HOST =
   process.env.NEXT_PUBLIC_THIRDWEB_PAYMENTS_API_HOST ||
   "https://payments.thirdweb.com";
+
+export const THIRDWEB_PAY_DOMAIN =
+  process.env.NEXT_PUBLIC_PAY_URL || "pay.thirdweb-dev.com";

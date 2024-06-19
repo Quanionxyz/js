@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLoggedInUser } from "../../../../@3rdweb-sdk/react/hooks/useLoggedInUser";
+import { THIRDWEB_PAY_DOMAIN } from "../../../../constants/urls";
 
 export type PayNewCustomersData = {
   intervalType: "day" | "week";
@@ -35,7 +36,7 @@ export function usePayNewCustomers(options: {
     ["usePayNewCustomers", user?.address, options],
     async () => {
       const endpoint = new URL(
-        "https://pay.thirdweb-dev.com/stats/aggregate/customers/v1",
+        `https://${THIRDWEB_PAY_DOMAIN}/stats/aggregate/customers/v1`,
       );
       endpoint.searchParams.append("intervalType", options.intervalType);
       endpoint.searchParams.append("clientId", options.clientId);

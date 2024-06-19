@@ -1,9 +1,9 @@
-/* eslint-disable react/forbid-dom-props */
-import { Pie, PieChart, Cell } from "recharts";
 import { cn } from "@/lib/utils";
+/* eslint-disable react/forbid-dom-props */
+import { Cell, Pie, PieChart } from "recharts";
+import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 import { usePayVolume } from "../hooks/usePayVolume";
 import { NoDataAvailable, chartHeight } from "./common";
-import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 
 type VolData = {
   name: string;
@@ -98,12 +98,12 @@ function RenderData(props: { data?: UIQueryData }) {
         {
           name: "Crypto",
           amount: queryData.cryptoTotalUSD,
-          color: "hsl(var(--link-foreground))",
+          color: "#6366f1",
         },
         {
           name: "Fiat",
           amount: queryData.fiatTotalUSD,
-          color: "hsl(var(--foreground))",
+          color: "#d946ef",
         },
       ]
     : skeletonData;

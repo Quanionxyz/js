@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLoggedInUser } from "../../../../@3rdweb-sdk/react/hooks/useLoggedInUser";
+import { THIRDWEB_PAY_DOMAIN } from "../../../../constants/urls";
 
 type AggregatedData = {
   succeeded: {
@@ -66,7 +67,7 @@ export function usePayVolume(options: {
     ["usePayVolume", user?.address, options],
     async () => {
       const endpoint = new URL(
-        "https://pay.thirdweb-dev.com/stats/aggregate/volume/v1",
+        `https://${THIRDWEB_PAY_DOMAIN}/stats/aggregate/volume/v1`,
       );
       endpoint.searchParams.append("intervalType", options.intervalType);
       endpoint.searchParams.append("clientId", options.clientId);

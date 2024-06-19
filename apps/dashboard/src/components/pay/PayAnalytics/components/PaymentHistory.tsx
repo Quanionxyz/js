@@ -1,17 +1,17 @@
-import {
-  usePayPurchases,
-  type PayPurchasesData,
-} from "../hooks/usePayPurchases";
-import { CardHeading, NoDataAvailable } from "./common";
-import { CopyAddressButton } from "../../../../@/components/ui/CopyAddressButton";
 import { Button } from "@/components/ui/button";
-import { Badge } from "../../../../@/components/ui/badge";
-import { cn } from "../../../../@/lib/utils";
 import { format } from "date-fns";
+import { CopyAddressButton } from "../../../../@/components/ui/CopyAddressButton";
 import { ScrollShadow } from "../../../../@/components/ui/ScrollShadow/ScrollShadow";
 import { Spinner } from "../../../../@/components/ui/Spinner/Spinner";
-import { ExportToCSVButton } from "./ExportToCSVButton";
+import { Badge } from "../../../../@/components/ui/badge";
 import { Skeleton } from "../../../../@/components/ui/skeleton";
+import { cn } from "../../../../@/lib/utils";
+import {
+  type PayPurchasesData,
+  usePayPurchases,
+} from "../hooks/usePayPurchases";
+import { ExportToCSVButton } from "./ExportToCSVButton";
+import { CardHeading, NoDataAvailable } from "./common";
 
 type UIData = {
   purchases: PayPurchasesData["purchases"];
@@ -179,8 +179,8 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
           className={cn(
             "uppercase",
             purchase.purchaseType === "ONRAMP"
-              ? "bg-lime-200/50 dark:bg-lime-800/50 text-lime-800 dark:text-lime-200"
-              : "bg-sky-200/50 dark:bg-sky-900/50 text-sky-800 dark:text-sky-200",
+              ? "bg-fuchsia-200 dark:bg-fuchsia-950 text-fuchsia-800 dark:text-fuchsia-200"
+              : "bg-indigo-200 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-200",
           )}
         >
           {purchase.purchaseType === "ONRAMP" ? "Fiat" : "Crypto"}
@@ -216,7 +216,7 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
       {/* Address */}
       <TableData>
         <CopyAddressButton
-          address={purchase.toAddress}
+          address={purchase.fromAddress}
           variant="ghost"
           className="text-secondary-foreground"
         />
@@ -308,7 +308,7 @@ function getCSVData(data: PayPurchasesData["purchases"]) {
     purchase.purchaseType === "ONRAMP" ? purchase.fromCurrencySymbol : "",
 
     // recipient
-    purchase.toAddress,
+    purchase.fromAddress,
     format(new Date(purchase.updatedAt), "LLL dd y h:mm a"),
   ]);
 
