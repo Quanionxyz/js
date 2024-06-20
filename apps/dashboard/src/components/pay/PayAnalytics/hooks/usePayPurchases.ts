@@ -7,18 +7,16 @@ export type PayPurchasesData = {
   purchases: Array<
     {
       createdAt: string;
-      estimatedFeesUSDCents: number;
-      fromAmountUSDCents: number;
-      fromAmountWei: string;
-      fromAmountUnits: string;
-
-      purchaseId: string;
-
+      updatedAt: string;
       status: "COMPLETED" | "FAILED" | "PENDING";
       fromAddress: string;
+      estimatedFeesUSDCents: number;
+      fromAmountUSDCents: number;
       toAmountUSDCents: number;
       toAmountWei: string;
-      updatedAt: string;
+      toAmount: string;
+      purchaseId: string;
+
       toToken: {
         chainId: number;
         decimals: number;
@@ -31,9 +29,12 @@ export type PayPurchasesData = {
           purchaseType: "ONRAMP";
           fromCurrencyDecimals: number;
           fromCurrencySymbol: string;
+          fromAmountUnits: string;
         }
       | {
           purchaseType: "SWAP";
+          fromAmountWei: string;
+          fromAmount: string;
           fromToken: {
             chainId: number;
             decimals: number;

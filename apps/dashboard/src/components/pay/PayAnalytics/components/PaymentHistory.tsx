@@ -100,13 +100,12 @@ function RenderData(props: {
       scrollableClassName="max-h-[350px] lg:max-h-[700px]"
       disableTopShadow={true}
     >
-      <table className="w-full">
+      <table className="w-full selection:bg-muted">
         <thead>
           <tr className="border-b border-border sticky top-0 bg-background z-10">
-            <TableHeading>Amount</TableHeading>
-            <TableHeading>Type</TableHeading>
-            <TableHeading> Paid </TableHeading>
             <TableHeading> Bought </TableHeading>
+            <TableHeading> Paid </TableHeading>
+            <TableHeading>Type</TableHeading>
             <TableHeading>Status</TableHeading>
             <TableHeading>Recipient</TableHeading>
             <TableHeading>Date</TableHeading>
@@ -124,6 +123,7 @@ function RenderData(props: {
           ) : (
             <>
               {new Array(20).fill(0).map((_, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: ok
                 <SkeletonTableRow key={i} rowIndex={i} />
               ))}
             </>
@@ -164,12 +164,14 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
       key={purchase.purchaseId}
       className="border-b border-border fade-in-0 duration-300"
     >
-      {/* Amount */}
+      {/* Bought */}
+      <TableData>{`${formatTokenAmount(purchase.toAmount)} ${purchase.toToken.symbol}`}</TableData>
+
+      {/* Paid */}
       <TableData>
-        {(purchase.toAmountUSDCents / 100).toLocaleString("en-US", {
-          currency: "USD",
-          style: "currency",
-        })}
+        {purchase.purchaseType === "SWAP"
+          ? `${formatTokenAmount(purchase.fromAmount)} ${purchase.fromToken.symbol}`
+          : `${formatTokenAmount(`${purchase.fromAmountUSDCents / 100}`)} ${purchase.fromCurrencySymbol}`}
       </TableData>
 
       {/* Type */}
@@ -186,16 +188,6 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
           {purchase.purchaseType === "ONRAMP" ? "Fiat" : "Crypto"}
         </Badge>
       </TableData>
-
-      {/* Paid */}
-      <TableData>
-        {purchase.purchaseType === "SWAP"
-          ? purchase.fromToken.symbol
-          : purchase.fromCurrencySymbol}
-      </TableData>
-
-      {/* Bought */}
-      <TableData>{purchase.toToken.symbol}</TableData>
 
       {/* Status */}
       <TableData>
@@ -268,49 +260,37 @@ function TableHeading(props: { children: React.ReactNode }) {
 }
 
 function getCSVData(data: PayPurchasesData["purchases"]) {
-  const header = [
-    "Amount",
-    "Type",
-    "Status",
-    // to
-    "Buy Token address",
-    "Buy Token chain",
-    "Buy Token Symbol",
-    // from
-    "From Token address",
-    "From Token chain",
-    "From Token Symbol",
-    "From currency",
-    // status
-    "Recipient",
-    // recipient
-    "Date",
-  ];
+  const header = ["Type", "Bought", "Paid", "Status", "Recipient", "Date"];
 
   const rows: string[][] = data.map((purchase) => [
-    // amount
-    (purchase.toAmountUSDCents / 100).toLocaleString("en-US", {
-      currency: "USD",
-      style: "currency",
-    }),
+    // bought
+    `${formatTokenAmount(purchase.toAmount)} ${purchase.toToken.symbol}`,
+    // paid
+    purchase.purchaseType === "SWAP"
+      ? `${formatTokenAmount(purchase.fromAmount)} ${purchase.fromToken.symbol}`
+      : `${formatTokenAmount(`${purchase.fromAmountUSDCents / 100}`)} ${purchase.fromCurrencySymbol}`,
     // type
     purchase.purchaseType === "ONRAMP" ? "Fiat" : "Crypto",
     // status
     purchase.status,
-    // to
-    purchase.toToken.tokenAddress,
-    `${purchase.toToken.chainId}`,
-    purchase.toToken.symbol,
-    // from
-    purchase.purchaseType === "SWAP" ? purchase.fromToken.tokenAddress : "",
-    purchase.purchaseType === "SWAP" ? `${purchase.fromToken.chainId}` : "",
-    purchase.purchaseType === "SWAP" ? purchase.fromToken.symbol : "",
-    purchase.purchaseType === "ONRAMP" ? purchase.fromCurrencySymbol : "",
-
     // recipient
     purchase.fromAddress,
+    // date
     format(new Date(purchase.updatedAt), "LLL dd y h:mm a"),
   ]);
 
   return { header, rows };
+}
+
+/**
+ * @internal
+ */
+export function formatTokenAmount(value: string) {
+  // have at max 3 decimal places
+  const strValue = Number(`${Number(value).toFixed(3)}`);
+
+  if (Number(strValue) === 0) {
+    return "~0";
+  }
+  return strValue;
 }
