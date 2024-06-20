@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { CardHeading, NoDataAvailable } from "./common";
-import { usePayVolume } from "../hooks/usePayVolume";
+/* eslint-disable react/forbid-dom-props */
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
+import { usePayVolume } from "../hooks/usePayVolume";
+import { CardHeading, NoDataAvailable } from "./common";
 
 type UIData = {
   succeeded: number;
@@ -17,7 +18,6 @@ type UIData = {
   total: number;
 };
 
-/* eslint-disable react/forbid-dom-props */
 export function PaymentsSuccessRate(props: {
   clientId: string;
   from: Date;
@@ -122,7 +122,7 @@ function RenderData(props: { data?: UIData }) {
         loadedData={props.data?.rate}
         skeletonData={50}
         render={(rate) => <Bar rate={rate} />}
-      ></SkeletonContainer>
+      />
 
       <div className="h-6" />
 
@@ -174,14 +174,7 @@ function InfoRow(props: {
         loadedData={props.amount}
         skeletonData={50}
         render={(v) => {
-          return (
-            <p className="text-base font-medium">
-              {v.toLocaleString("en-US", {
-                currency: "USD",
-                style: "currency",
-              })}
-            </p>
-          );
+          return <p className="text-base font-medium">${v.toLocaleString()}</p>;
         }}
       />
     </div>

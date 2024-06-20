@@ -1,6 +1,6 @@
-import { ApiKey } from "@3rdweb-sdk/react/hooks/useApi";
-import { format } from "date-fns";
 /* eslint-disable react/forbid-dom-props */
+import type { ApiKey } from "@3rdweb-sdk/react/hooks/useApi";
+import { format } from "date-fns";
 import { useState } from "react";
 import { DatePickerWithRange } from "../../../@/components/ui/DatePickerWithRange";
 import {
@@ -18,10 +18,33 @@ import { TopPayCustomers } from "./components/TopPayCustomers";
 import { TotalPayVolume } from "./components/TotalPayVolume";
 import { TotalVolumePieChart } from "./components/TotalVolumePieChart";
 
-type LastX = "last-7" | "last-30" | "last-60" | "last-120";
+const durationPresets = [
+  {
+    name: "Last 7 Days",
+    id: "last-7",
+    days: 7,
+  },
+  {
+    name: "Last 30 Days",
+    id: "last-30",
+    days: 30,
+  },
+  {
+    name: "Last 60 Days",
+    id: "last-60",
+    days: 60,
+  },
+  {
+    name: "Last 120 Days",
+    id: "last-120",
+    days: 120,
+  },
+] as const;
+
+type DurationId = (typeof durationPresets)[number]["id"];
 
 type Range = {
-  type: LastX | "custom";
+  type: DurationId | "custom";
   label?: string;
   from: Date;
   to: Date;
@@ -89,33 +112,22 @@ export function PayAnalytics(props: { apiKey: ApiKey }) {
   );
 }
 
-function getLastNDaysRange(type: LastX) {
+function getLastNDaysRange(id: DurationId) {
   const todayDate = new Date();
   const pastDate = new Date(todayDate);
 
-  let days = 0;
-  let label = "";
-  if (type === "last-7") {
-    days = 7;
-    label = "Last 7 Days";
-  } else if (type === "last-30") {
-    days = 30;
-    label = "Last 30 Days";
-  } else if (type === "last-60") {
-    days = 60;
-    label = "Last 60 Days";
-  } else if (type === "last-120") {
-    days = 120;
-    label = "Last 120 Days";
+  const durationInfo = durationPresets.find((preset) => preset.id === id);
+  if (!durationInfo) {
+    throw new Error("Invalid duration id");
   }
 
-  pastDate.setDate(todayDate.getDate() - days);
+  pastDate.setDate(todayDate.getDate() - durationInfo.days);
 
   const value: Range = {
-    type,
+    type: id,
     from: pastDate,
     to: todayDate,
-    label,
+    label: durationInfo.name,
   };
 
   return value;
@@ -128,18 +140,19 @@ function Filters(props: { range: Range; setRange: (range: Range) => void }) {
     <div className="p-4 border-b border-border mb-2">
       <Select
         value={range.type}
-        onValueChange={(value: LastX) => {
-          setRange(getLastNDaysRange(value));
+        onValueChange={(id: DurationId) => {
+          setRange(getLastNDaysRange(id));
         }}
       >
         <SelectTrigger className="bg-transparent flex">
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent position="popper">
-          <SelectItem value="last-7">Last 7 Days </SelectItem>
-          <SelectItem value="last-30">Last 30 Days </SelectItem>
-          <SelectItem value="last-60">Last 60 Days </SelectItem>
-          <SelectItem value="last-120">Last 120 Days </SelectItem>
+          {durationPresets.map((preset) => (
+            <SelectItem key={preset.id} value={preset.id}>
+              {preset.name}
+            </SelectItem>
+          ))}
 
           {range.type === "custom" && (
             <SelectItem value="custom">

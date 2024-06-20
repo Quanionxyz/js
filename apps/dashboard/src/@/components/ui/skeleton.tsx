@@ -1,5 +1,4 @@
 /* eslint-disable react/forbid-dom-props */
-
 import { cn } from "@/lib/utils";
 
 function Skeleton({

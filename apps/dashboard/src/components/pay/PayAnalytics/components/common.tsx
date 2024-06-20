@@ -1,11 +1,14 @@
-import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ArrowDownIcon, ArrowUpIcon, OctagonXIcon } from "lucide-react";
 import { ToolTipLabel } from "../../../../@/components/ui/tooltip";
 
 export function NoDataAvailable() {
   return (
     <div className="h-[250px] flex items-center justify-center">
-      <p className="text-muted-foreground">No data available</p>
+      <div className="flex items-center gap-2">
+        <OctagonXIcon className="size-5 text-destructive-foreground" />
+        <p className="text-muted-foreground">No data available</p>
+      </div>
     </div>
   );
 }

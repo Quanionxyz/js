@@ -1,13 +1,13 @@
 import { CopyAddressButton } from "../../../../@/components/ui/CopyAddressButton";
-import { CardHeading, NoDataAvailable } from "./common";
-import {
-  usePayTopCustomers,
-  type PayTopCustomersData,
-} from "../hooks/usePayTopCustomers";
-import { Button } from "../../../../@/components/ui/button";
 import { ScrollShadow } from "../../../../@/components/ui/ScrollShadow/ScrollShadow";
-import { ExportToCSVButton } from "./ExportToCSVButton";
+import { Button } from "../../../../@/components/ui/button";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
+import {
+  type PayTopCustomersData,
+  usePayTopCustomers,
+} from "../hooks/usePayTopCustomers";
+import { ExportToCSVButton } from "./ExportToCSVButton";
+import { CardHeading, NoDataAvailable } from "./common";
 
 type UIData = {
   customers: Array<{
@@ -118,6 +118,7 @@ function RenderData(props: { data?: UIData; loadMore: () => void }) {
           ) : (
             <>
               {new Array(5).fill(0).map((_, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: ok
                 <TableRow rowIndex={i} key={i} />
               ))}
             </>
@@ -177,14 +178,7 @@ function TableRow(props: {
           loadedData={props.customer?.totalSpendUSDCents}
           skeletonData={20000}
           render={(v) => {
-            return (
-              <p>
-                {(v / 100).toLocaleString("en-US", {
-                  currency: "USD",
-                  style: "currency",
-                })}
-              </p>
-            );
+            return <p>${(v / 100).toLocaleString()}</p>;
           }}
         />
       </TableData>
@@ -208,10 +202,7 @@ function getCSVData(data: PayTopCustomersData["customers"]) {
   const header = ["Wallet Address", "Total spend"];
   const rows = data.map((customer) => [
     customer.walletAddress,
-    (customer.totalSpendUSDCents / 100).toLocaleString("en-US", {
-      currency: "USD",
-      style: "currency",
-    }),
+    `$${(customer.totalSpendUSDCents / 100).toLocaleString()}`,
   ]);
 
   return { header, rows };

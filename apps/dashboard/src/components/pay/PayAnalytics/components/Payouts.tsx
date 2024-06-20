@@ -1,6 +1,10 @@
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { usePayVolume } from "../hooks/usePayVolume";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { useState } from "react";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
+import { AreaChartLoadingState } from "../../../analytics/area-chart";
+import { usePayVolume } from "../hooks/usePayVolume";
 import { IntervalSelector } from "./IntervalSelector";
 import {
   CardHeading,
@@ -8,10 +12,6 @@ import {
   NoDataAvailable,
   chartHeight,
 } from "./common";
-import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
-import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
-import { AreaChartLoadingState } from "../../../analytics/area-chart";
 
 type GraphData = {
   date: string;
@@ -104,10 +104,7 @@ function RenderData(props: {
           render={(value) => {
             return (
               <p className="text-4xl tracking-tighter font-semibold">
-                {value.toLocaleString("en-US", {
-                  currency: "USD",
-                  style: "currency",
-                })}
+                ${value.toLocaleString()}
               </p>
             );
           }}
@@ -138,10 +135,7 @@ function RenderData(props: {
                         {payload?.date}
                       </p>
                       <p className="text-medium text-base">
-                        {payload?.value.toLocaleString("en-US", {
-                          currency: "USD",
-                          style: "currency",
-                        })}
+                        ${payload?.value.toLocaleString()}
                       </p>
                     </div>
                   );

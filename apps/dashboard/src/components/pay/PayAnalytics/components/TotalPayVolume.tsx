@@ -1,18 +1,18 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { format } from "date-fns";
 /* eslint-disable react/forbid-dom-props */
 import { useId, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { usePayVolume, type PayVolumeData } from "../hooks/usePayVolume";
-import { CardHeading, NoDataAvailable, chartHeight } from "./common";
-import { IntervalSelector } from "./IntervalSelector";
-import { format } from "date-fns";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { AreaChartLoadingState } from "../../../analytics/area-chart";
+import { type PayVolumeData, usePayVolume } from "../hooks/usePayVolume";
+import { IntervalSelector } from "./IntervalSelector";
+import { CardHeading, NoDataAvailable, chartHeight } from "./common";
 
 type GraphData = {
   date: string;
@@ -87,6 +87,10 @@ function RenderData(props: {
       };
     },
   );
+
+  if (graphData?.length === 0) {
+    return <NoDataAvailable />;
+  }
 
   const chartColor =
     successType === "success"
@@ -163,10 +167,7 @@ function RenderData(props: {
                         {payload?.date}
                       </p>
                       <p className="text-medium text-base">
-                        {payload?.value.toLocaleString("en-US", {
-                          currency: "USD",
-                          style: "currency",
-                        })}
+                        ${payload?.value.toLocaleString()}
                       </p>
                     </div>
                   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 import { ScrollShadow } from "./ScrollShadow/ScrollShadow";
 import { Button } from "./button";
@@ -37,10 +37,10 @@ export function TabLinks(props: {
         <div
           ref={lineRef}
           className="absolute left-0 bottom-0 z-10 h-[2px] bg-foreground rounded-lg fade-in-0 animate-in"
-        ></div>
+        />
       </ScrollShadow>
       {/* Bottom line */}
-      <div className="h-[1px] bg-border -translate-y-[2px]"></div>
+      <div className="h-[1px] bg-border -translate-y-[2px]" />
     </div>
   );
 }
@@ -94,10 +94,10 @@ export function TabButtons(props: {
         <div
           ref={lineRef}
           className="absolute left-0 bottom-0 z-10 h-[2px] bg-foreground rounded-lg fade-in-0 animate-in"
-        ></div>
+        />
       </ScrollShadow>
       {/* Bottom line */}
-      <div className="h-[1px] bg-border -translate-y-[2px]"></div>
+      <div className="h-[1px] bg-border -translate-y-[2px]" />
     </div>
   );
 }
@@ -111,9 +111,7 @@ function useUnderline<El extends HTMLElement>() {
     setActiveTabEl(el);
   }, []);
 
-  // legitimate usecase
-  // eslint-disable-next-line no-restricted-syntax
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (activeTabEl && containerRef.current && lineRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect();
       const lineEl = lineRef.current;

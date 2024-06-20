@@ -242,7 +242,6 @@ function SkeletonTableRow(props: { rowIndex: number }) {
       <TableData>{skeleton}</TableData>
       <TableData>{skeleton}</TableData>
       <TableData>{skeleton}</TableData>
-      <TableData>{skeleton}</TableData>
     </tr>
   );
 }
@@ -282,10 +281,7 @@ function getCSVData(data: PayPurchasesData["purchases"]) {
   return { header, rows };
 }
 
-/**
- * @internal
- */
-export function formatTokenAmount(value: string) {
+function formatTokenAmount(value: string) {
   // have at max 3 decimal places
   const strValue = Number(`${Number(value).toFixed(3)}`);
 

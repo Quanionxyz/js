@@ -129,6 +129,7 @@ function RenderData(props: { data?: UIQueryData }) {
             paddingAngle={5}
           >
             {volumeData.map((entry, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: ok
               <Cell key={index} fill={entry.color} />
             ))}
           </Pie>
@@ -142,10 +143,7 @@ function RenderData(props: { data?: UIQueryData }) {
               loadedData={queryData?.totalAmount}
               skeletonData={100}
               render={(v) => {
-                const totalAmount = v.toLocaleString("en-US", {
-                  currency: "USD",
-                  style: "currency",
-                });
+                const totalAmount = `$${v.toLocaleString()}`;
 
                 return (
                   <p
@@ -166,9 +164,9 @@ function RenderData(props: { data?: UIQueryData }) {
       {/* Right */}
       <div className="flex items-center border-t border-border pt-5 lg:pt-0 lg:border-none pr-10">
         <div className="flex flex-col gap-4">
-          {volumeData.map((v, i) => (
+          {volumeData.map((v) => (
             <VolumeLegend
-              key={i}
+              key={v.name}
               color={v.color}
               label={v.name}
               amount={queryData ? v.amount : undefined}
@@ -204,10 +202,7 @@ function VolumeLegend(props: {
           render={(amount) => {
             return (
               <p className="text-2xl text-foreground font-semibold tracking-tight">
-                {amount.toLocaleString("en-US", {
-                  currency: "USD",
-                  style: "currency",
-                })}
+                ${amount.toLocaleString()}
               </p>
             );
           }}
