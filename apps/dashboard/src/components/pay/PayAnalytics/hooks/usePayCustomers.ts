@@ -31,7 +31,7 @@ export function usePayCustomers(options: {
       const endpoint = new URL(
         options.type === "new-customers"
           ? `https://${THIRDWEB_PAY_DOMAIN}/stats/new-customers/v1`
-          : `https://${THIRDWEB_PAY_DOMAIN}/stats/customers/v1`
+          : `https://${THIRDWEB_PAY_DOMAIN}/stats/customers/v1`,
       );
 
       const start = options.pageSize * pageParam;

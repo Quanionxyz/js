@@ -1,5 +1,3 @@
-/* eslint-disable react/forbid-dom-props */
-
 import { useEffect, useId, useState } from "react";
 import {
   Area,

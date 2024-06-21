@@ -62,8 +62,6 @@ export const BarChart = <
     return null;
   }
 
-  const indexType = index.type || "date";
-
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RechartsBarChart data={data}>

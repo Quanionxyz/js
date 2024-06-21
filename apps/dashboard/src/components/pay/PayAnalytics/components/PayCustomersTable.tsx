@@ -8,12 +8,7 @@ import {
   usePayCustomers,
 } from "../hooks/usePayCustomers";
 import { ExportToCSVButton } from "./ExportToCSVButton";
-import {
-  CardHeading,
-  NoDataAvailable,
-  TableData,
-  TableHeading,
-} from "./common";
+import { NoDataAvailable, TableData, TableHeading } from "./common";
 
 import {
   Select,

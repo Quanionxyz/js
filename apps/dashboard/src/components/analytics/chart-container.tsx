@@ -1,4 +1,3 @@
-import { type AspectRatioProps, Flex } from "@chakra-ui/react";
 import { Suspense } from "react";
 import type { ComponentWithChildren } from "types/component-with-children";
 import { AspectRatio } from "../../@/components/ui/aspect-ratio";

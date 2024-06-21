@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-/* eslint-disable react/forbid-dom-props */
 import { Cell, Pie, PieChart } from "recharts";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 import { usePayVolume } from "../hooks/usePayVolume";

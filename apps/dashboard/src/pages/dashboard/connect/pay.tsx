@@ -7,8 +7,6 @@ import {
   type BoxProps,
   Flex,
   FormControl,
-  HStack,
-  Heading,
   Tab,
   TabList,
   TabPanel,
@@ -34,7 +32,7 @@ import { Spinner } from "../../../@/components/ui/Spinner/Spinner";
 import { TabButtons } from "../../../@/components/ui/tabs";
 import { PayAnalytics } from "../../../components/pay/PayAnalytics/PayAnalytics";
 import { PageId } from "../../../page-id";
-import { Text, TrackedLink } from "../../../tw-components";
+import { TrackedLink } from "../../../tw-components";
 import type { ThirdwebNextPage } from "../../../utils/types";
 
 const TRACKING_CATEGORY = "pay";

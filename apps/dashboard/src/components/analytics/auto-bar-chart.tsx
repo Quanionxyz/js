@@ -116,8 +116,6 @@ export const AutoBarChart = <
     }));
   }, [data, index.id, barColors]);
 
-  const indexType = index.type || "date";
-
   const sortedData = useMemo(() => {
     return [...data].sort(
       (a, b) => (a[index.id] as number) - (b[index.id] as number),

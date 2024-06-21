@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-dom-props */
 import type { ApiKey } from "@3rdweb-sdk/react/hooks/useApi";
 import { format } from "date-fns";
 import { useState } from "react";
