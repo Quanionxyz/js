@@ -16,11 +16,12 @@ type Response = {
   };
 };
 
-export function usePayTopCustomers(options: {
+export function usePayCustomers(options: {
   clientId: string;
   from: Date;
   to: Date;
   pageSize: number;
+  type: "top-customers" | "new-customers";
 }) {
   const { user, isLoggedIn } = useLoggedInUser();
 
@@ -28,7 +29,9 @@ export function usePayTopCustomers(options: {
     queryKey: ["usePayTopCustomers", user?.address, options],
     queryFn: async ({ pageParam = 0 }) => {
       const endpoint = new URL(
-        `https://${THIRDWEB_PAY_DOMAIN}/stats/customers/v1`,
+        options.type === "new-customers"
+          ? `https://${THIRDWEB_PAY_DOMAIN}/stats/new-customers/v1`
+          : `https://${THIRDWEB_PAY_DOMAIN}/stats/customers/v1`
       );
 
       const start = options.pageSize * pageParam;

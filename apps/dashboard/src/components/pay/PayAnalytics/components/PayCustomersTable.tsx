@@ -1,13 +1,27 @@
+import { useState } from "react";
 import { CopyAddressButton } from "../../../../@/components/ui/CopyAddressButton";
 import { ScrollShadow } from "../../../../@/components/ui/ScrollShadow/ScrollShadow";
 import { Button } from "../../../../@/components/ui/button";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 import {
   type PayTopCustomersData,
-  usePayTopCustomers,
-} from "../hooks/usePayTopCustomers";
+  usePayCustomers,
+} from "../hooks/usePayCustomers";
 import { ExportToCSVButton } from "./ExportToCSVButton";
-import { CardHeading, NoDataAvailable } from "./common";
+import {
+  CardHeading,
+  NoDataAvailable,
+  TableData,
+  TableHeading,
+} from "./common";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type UIData = {
   customers: Array<{
@@ -17,16 +31,21 @@ type UIData = {
   showLoadMore: boolean;
 };
 
-export function TopPayCustomers(props: {
+export function PayCustomersTable(props: {
   clientId: string;
   from: Date;
   to: Date;
 }) {
-  const topCustomersQuery = usePayTopCustomers({
+  const [type, setType] = useState<"top-customers" | "new-customers">(
+    "new-customers",
+  );
+
+  const topCustomersQuery = usePayCustomers({
     clientId: props.clientId,
     from: props.from,
     to: props.to,
     pageSize: 100,
+    type,
   });
 
   function getUIData(): {
@@ -64,10 +83,27 @@ export function TopPayCustomers(props: {
   const customersData = uiData.data?.customers;
 
   return (
-    <div className="flex flex-col relative overflow-auto">
+    <div>
       {/* header */}
       <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:items-center">
-        <CardHeading> Top customers by spend </CardHeading>
+        <Select
+          value={type}
+          onValueChange={(value: "top-customers" | "new-customers") => {
+            setType(value);
+          }}
+        >
+          <SelectTrigger className="bg-transparent w-auto border-none p-0 text-base focus:ring-transparent">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent position="popper">
+            <SelectItem value="top-customers">
+              {" "}
+              Top Customers By Spend{" "}
+            </SelectItem>
+            <SelectItem value="new-customers"> New Customers </SelectItem>
+          </SelectContent>
+        </Select>
+
         {customersData && (
           <ExportToCSVButton
             fileName="top_customers"
@@ -108,7 +144,7 @@ function RenderData(props: { data?: UIData; loadMore: () => void }) {
           {props.data ? (
             props.data?.customers.map((customer, i) => {
               return (
-                <TableRow
+                <CustomerTableRow
                   key={customer.walletAddress}
                   customer={customer}
                   rowIndex={i}
@@ -119,7 +155,7 @@ function RenderData(props: { data?: UIData; loadMore: () => void }) {
             <>
               {new Array(5).fill(0).map((_, i) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: ok
-                <TableRow rowIndex={i} key={i} />
+                <CustomerTableRow rowIndex={i} key={i} />
               ))}
             </>
           )}
@@ -141,7 +177,7 @@ function RenderData(props: { data?: UIData; loadMore: () => void }) {
   );
 }
 
-function TableRow(props: {
+function CustomerTableRow(props: {
   customer?: {
     walletAddress: string;
     totalSpendUSDCents: number;
@@ -183,18 +219,6 @@ function TableRow(props: {
         />
       </TableData>
     </tr>
-  );
-}
-
-function TableData({ children }: { children: React.ReactNode }) {
-  return <td className="px-0 py-2 text-sm">{children}</td>;
-}
-
-function TableHeading(props: { children: React.ReactNode }) {
-  return (
-    <th className="text-left px-0 py-3 text-sm font-medium text-muted-foreground min-w-[150px]">
-      {props.children}
-    </th>
   );
 }
 

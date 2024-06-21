@@ -10,11 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../@/components/ui/select";
+import { PayCustomersTable } from "./components/PayCustomersTable";
 import { PayNewCustomers } from "./components/PayNewCustomers";
 import { PaymentHistory } from "./components/PaymentHistory";
 import { PaymentsSuccessRate } from "./components/PaymentsSuccessRate";
 import { Payouts } from "./components/Payouts";
-import { TopPayCustomers } from "./components/TopPayCustomers";
 import { TotalPayVolume } from "./components/TotalPayVolume";
 import { TotalVolumePieChart } from "./components/TotalVolumePieChart";
 
@@ -100,7 +100,11 @@ export function PayAnalytics(props: { apiKey: ApiKey }) {
             to={range.to}
           />
         </div>
-        <TopPayCustomers clientId={clientId} from={range.from} to={range.to} />
+        <PayCustomersTable
+          clientId={clientId}
+          from={range.from}
+          to={range.to}
+        />
       </GridWithSeparator>
 
       <div className="h-4" />

@@ -11,7 +11,12 @@ import {
   usePayPurchases,
 } from "../hooks/usePayPurchases";
 import { ExportToCSVButton } from "./ExportToCSVButton";
-import { CardHeading, NoDataAvailable } from "./common";
+import {
+  CardHeading,
+  NoDataAvailable,
+  TableData,
+  TableHeading,
+} from "./common";
 
 type UIData = {
   purchases: PayPurchasesData["purchases"];
@@ -243,18 +248,6 @@ function SkeletonTableRow(props: { rowIndex: number }) {
       <TableData>{skeleton}</TableData>
       <TableData>{skeleton}</TableData>
     </tr>
-  );
-}
-
-function TableData({ children }: { children: React.ReactNode }) {
-  return <td className="px-0 py-2 text-sm">{children}</td>;
-}
-
-function TableHeading(props: { children: React.ReactNode }) {
-  return (
-    <th className="text-left px-0 py-3 text-sm font-medium text-muted-foreground min-w-[150px]">
-      {props.children}
-    </th>
   );
 }
 

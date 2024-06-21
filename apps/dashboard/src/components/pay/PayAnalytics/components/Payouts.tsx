@@ -5,10 +5,10 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 import { AreaChartLoadingState } from "../../../analytics/area-chart";
 import { usePayVolume } from "../hooks/usePayVolume";
-import { IntervalSelector } from "./IntervalSelector";
 import {
   CardHeading,
   ChangeBadge,
+  IntervalSelector,
   NoDataAvailable,
   chartHeight,
 } from "./common";

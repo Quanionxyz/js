@@ -1,16 +1,16 @@
+import { format } from "date-fns";
 import { useId, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
+import { AreaChartLoadingState } from "../../../analytics/area-chart";
 import { usePayNewCustomers } from "../hooks/usePayNewCustomers";
-import { IntervalSelector } from "./IntervalSelector";
 import {
   CardHeading,
   ChangeBadge,
+  IntervalSelector,
   NoDataAvailable,
   chartHeight,
 } from "./common";
-import { format } from "date-fns";
-import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
-import { AreaChartLoadingState } from "../../../analytics/area-chart";
 
 type GraphDataItem = {
   date: string;
@@ -173,7 +173,7 @@ function RenderData(props: {
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke={`hsl(var(--link-foreground))`}
+                stroke="hsl(var(--link-foreground))"
                 fillOpacity={1}
                 fill={`url(#${uniqueId})`}
                 strokeWidth={2}

@@ -11,8 +11,12 @@ import { useId, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { AreaChartLoadingState } from "../../../analytics/area-chart";
 import { type PayVolumeData, usePayVolume } from "../hooks/usePayVolume";
-import { IntervalSelector } from "./IntervalSelector";
-import { CardHeading, NoDataAvailable, chartHeight } from "./common";
+import {
+  CardHeading,
+  IntervalSelector,
+  NoDataAvailable,
+  chartHeight,
+} from "./common";
 
 type GraphData = {
   date: string;

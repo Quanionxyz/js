@@ -2,6 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowDownIcon, ArrowUpIcon, OctagonXIcon } from "lucide-react";
 import { ToolTipLabel } from "../../../../@/components/ui/tooltip";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export function NoDataAvailable() {
   return (
     <div className="h-[250px] flex items-center justify-center">
@@ -41,6 +49,40 @@ export function ChangeBadge(props: { percent: number }) {
         </Badge>
       </div>
     </ToolTipLabel>
+  );
+}
+
+export function TableData({ children }: { children: React.ReactNode }) {
+  return <td className="px-0 py-2 text-sm">{children}</td>;
+}
+
+export function TableHeading(props: { children: React.ReactNode }) {
+  return (
+    <th className="text-left px-0 py-3 text-sm font-medium text-muted-foreground min-w-[150px]">
+      {props.children}
+    </th>
+  );
+}
+
+export function IntervalSelector(props: {
+  intervalType: "day" | "week";
+  setIntervalType: (intervalType: "day" | "week") => void;
+}) {
+  return (
+    <Select
+      value={props.intervalType}
+      onValueChange={(value: "day" | "week") => {
+        props.setIntervalType(value);
+      }}
+    >
+      <SelectTrigger className="bg-transparent w-auto">
+        <SelectValue placeholder="Select" />
+      </SelectTrigger>
+      <SelectContent position="popper">
+        <SelectItem value="week"> Weekly </SelectItem>
+        <SelectItem value="day"> Daily</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }
 
