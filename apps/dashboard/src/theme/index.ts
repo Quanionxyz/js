@@ -398,7 +398,10 @@ const chakraTheme: Theme = extendTheme({
       wordmark: { default: "#262A36", _dark: "whiteAlpha.900" },
       heading: { default: "#262A36", _dark: "#ECECEC" },
       paragraph: { default: "rgba(39, 46, 54, 0.9)", _dark: "#b2b2b2" },
-      faded: { default: "rgba(39, 46, 54, 0.6)", _dark: "#646D7A" },
+      faded: {
+        default: "hsl(var(--muted-foreground))",
+        _dark: "hsl(var(--muted-foreground))",
+      },
       headingLight: { default: "#F2FBFF", _dark: "#262A36" },
       paragraphLight: {
         default: "rgba(242, 251, 255, 0.8)",

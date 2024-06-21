@@ -162,8 +162,8 @@ function RenderData(props: { data?: UIQueryData }) {
       </div>
 
       {/* Right */}
-      <div className="flex items-center border-t border-border pt-5 lg:pt-0 lg:border-none pr-10">
-        <div className="flex flex-col gap-4">
+      <div className="lg:flex items-center border-t border-border pt-5 lg:pt-0 lg:border-none lg:pr-10">
+        <div className="flex lg:flex-col gap-10 lg:gap-4 justify-center">
           {volumeData.map((v) => (
             <VolumeLegend
               key={v.name}

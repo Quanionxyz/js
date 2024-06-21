@@ -84,7 +84,6 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
           <Box
             position={{ base: "absolute", md: "relative" }}
             maxH={{ base: openState.isOpen ? "100vh" : "0px", md: "100%" }}
-            bg="backgroundHighlight"
             transition="max-height 0.2s ease-in-out"
             overflow={{ base: "hidden", md: "visible" }}
             w="full"

@@ -58,59 +58,52 @@ export function PayAnalytics(props: { apiKey: ApiKey }) {
 
   return (
     <div>
-      <div className="flex">
+      <div className="flex mb-2">
         <Filters range={range} setRange={setRange} />
       </div>
+      <div className="flex flex-col gap-10 lg:gap-4">
+        <GridWithSeparator>
+          <div className="border-b border-border pb-6 xl:pb-0 xl:border-none flex items-center">
+            <TotalVolumePieChart
+              clientId={clientId}
+              from={range.from}
+              to={range.to}
+            />
+          </div>
+          <TotalPayVolume clientId={clientId} from={range.from} to={range.to} />
+        </GridWithSeparator>
 
-      <div className="h-4" />
+        <div className="grid gap-4 grid-cols-1 xl:grid-cols-2 ">
+          <div className="border border-border rounded-xl p-4 xl:p-6">
+            <Payouts clientId={clientId} from={range.from} to={range.to} />
+          </div>
+          <div className="border border-border rounded-xl p-4 xl:p-6 flex ">
+            <PaymentsSuccessRate
+              clientId={clientId}
+              from={range.from}
+              to={range.to}
+            />
+          </div>
+        </div>
 
-      <GridWithSeparator>
-        <div className="border-b border-border pb-6 xl:pb-0 xl:border-none flex items-center">
-          <TotalVolumePieChart
+        <GridWithSeparator>
+          <div className="border-b border-border pb-6 xl:pb-0 xl:border-none">
+            <PayNewCustomers
+              clientId={clientId}
+              from={range.from}
+              to={range.to}
+            />
+          </div>
+          <PayCustomersTable
             clientId={clientId}
             from={range.from}
             to={range.to}
           />
-        </div>
-        <TotalPayVolume clientId={clientId} from={range.from} to={range.to} />
-      </GridWithSeparator>
+        </GridWithSeparator>
 
-      <div className="h-4" />
-
-      <div className="grid gap-4 grid-cols-1 xl:grid-cols-2 ">
         <div className="border border-border rounded-xl p-4 xl:p-6">
-          <Payouts clientId={clientId} from={range.from} to={range.to} />
+          <PaymentHistory clientId={clientId} from={range.from} to={range.to} />
         </div>
-        <div className="border border-border rounded-xl p-4 xl:p-6 flex ">
-          <PaymentsSuccessRate
-            clientId={clientId}
-            from={range.from}
-            to={range.to}
-          />
-        </div>
-      </div>
-
-      <div className="h-4" />
-
-      <GridWithSeparator>
-        <div className="border-b border-border pb-6 xl:pb-0 xl:border-none">
-          <PayNewCustomers
-            clientId={clientId}
-            from={range.from}
-            to={range.to}
-          />
-        </div>
-        <PayCustomersTable
-          clientId={clientId}
-          from={range.from}
-          to={range.to}
-        />
-      </GridWithSeparator>
-
-      <div className="h-4" />
-
-      <div className="border border-border rounded-xl p-4 xl:p-6">
-        <PaymentHistory clientId={clientId} from={range.from} to={range.to} />
       </div>
     </div>
   );
@@ -190,6 +183,7 @@ function Filters(props: { range: Range; setRange: (range: Range) => void }) {
         }
         header={presets}
         labelOverride={range.label}
+        className="p-0 border-none w-auto"
       />
     </div>
   );

@@ -197,44 +197,35 @@ const DashboardConnectPay: ThirdwebNextPage = () => {
 
   return (
     <Flex flexDir="column" gap={8}>
-      <Flex
-        flexDir={{ base: "column", lg: "row" }}
-        alignItems={{ base: "start", lg: "end" }}
-        w="full"
-        gap={4}
-        justifyContent={"space-between"}
-      >
-        <Flex flexDir={"column"} gap={2}>
-          <Heading size="title.lg" as="h1">
-            Pay
-          </Heading>
-          <Text maxW="xl">
-            Configure developer settings for all Pay features, including{" "}
+      <div className="flex gap-6 justify-between items-start">
+        <div className="max-w-[800px]">
+          <h1 className="text-5xl tracking-tight font-bold mb-5">Pay</h1>
+          <p className="text-secondary-foreground leading-7">
+            Pay allows your users to purchase cryptocurrencies and execute
+            transactions with their credit card or debit card, or with any token
+            via cross-chain routing.{" "}
             <TrackedLink
               isExternal
               category={TRACKING_CATEGORY}
-              href="https://portal.thirdweb.com/connect/pay/buy-with-crypto"
-              label="buy-with-crypto-docs"
-              color="primary.500"
+              href="https://portal.thirdweb.com/connect/pay/overview"
+              label="pay-docs"
+              className="!text-link-foreground"
             >
-              Buy With Crypto
+              Learn more
             </TrackedLink>
-            .
-          </Text>
-        </Flex>
+          </p>
+        </div>
 
-        {hasPayApiKeys && tabOption === "pay" && (
-          <HStack gap={3}>
-            {selectedKey && (
-              <ApiKeysMenu
-                apiKeys={apiKeysData}
-                selectedKey={selectedKey}
-                onSelect={setSelectedKey}
-              />
-            )}
-          </HStack>
-        )}
-      </Flex>
+        <div className="max-w-[300px]">
+          {hasPayApiKeys && tabOption === "pay" && selectedKey && (
+            <ApiKeysMenu
+              apiKeys={apiKeysData}
+              selectedKey={selectedKey}
+              onSelect={setSelectedKey}
+            />
+          )}
+        </div>
+      </div>
 
       {radioOptions.length > 1 && (
         <FormControl>
@@ -330,7 +321,6 @@ function PayUI(props: {
           />
 
           <div className="h-5" />
-
           {activeTab === "settings" && <PayConfig apiKey={selectedKey} />}
           {activeTab === "analytics" && <PayAnalytics apiKey={selectedKey} />}
         </>
