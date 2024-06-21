@@ -88,6 +88,16 @@ const usageEventSchema = z.object({
   // Used to identify the ecosystem that the an ecosystem wallet belongs too
   ecosystemId: z.string().optional(),
   ecosystemPartnerId: z.string().optional(),
+  chainName: z.string().optional(),
+  tokenSymbol: z.string().optional(),
+  dstChainId: z.number().optional(),
+  dstTokenAddress: z.string().optional(),
+  dstChainName: z.string().optional(),
+  dstTokenSymbol: z.string().optional(),
+  msLatency: z.number().optional(),
+  toAmountUSDCents: z.number().optional(),
+  secondaryProvider: z.string().optional(),
+  onRampId: z.string().optional(),
 });
 export type UsageEvent = z.infer<typeof usageEventSchema>;
 
@@ -112,7 +122,7 @@ export async function publishUsageEvents(
     accessKeyId: string;
     secretAccessKey: string;
     region?: string;
-  },
+  }
 ): Promise<void> {
   const {
     queueUrl,
