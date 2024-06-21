@@ -144,6 +144,7 @@ function usePayConfig() {
     setSelectedKey,
     apiKeysData,
     hasApiKeys: !!keysQuery.data?.length,
+    isFetchingKeys: keysQuery.isFetching,
   };
 }
 
@@ -178,12 +179,13 @@ const DashboardConnectPay: ThirdwebNextPage = () => {
     selectedKey,
     setSelectedKey,
     apiKeysData,
+    isFetchingKeys,
   } = usePayConfig();
   // Pay setting api key configuration
 
-  if (isLoading) {
+  if (isLoading || isFetchingKeys) {
     return (
-      <div className="min-h-[500px] flex items-center justify-center">
+      <div className="min-h-[calc(100vh-300px)] lg:min-h-[calc(100vh-250px)] flex items-center justify-center">
         <Spinner className="size-14" />
       </div>
     );
@@ -195,7 +197,7 @@ const DashboardConnectPay: ThirdwebNextPage = () => {
 
   return (
     <Flex flexDir="column" gap={8}>
-      <div className="flex gap-6 justify-between items-start">
+      <div className="flex flex-col lg:flex-row gap-6 justify-between items-start">
         <div className="max-w-[800px]">
           <h1 className="text-5xl tracking-tight font-bold mb-5">Pay</h1>
           <p className="text-secondary-foreground leading-7">
@@ -214,7 +216,7 @@ const DashboardConnectPay: ThirdwebNextPage = () => {
           </p>
         </div>
 
-        <div className="max-w-[300px]">
+        <div className="w-full lg:max-w-[300px]">
           {hasPayApiKeys && tabOption === "pay" && selectedKey && (
             <ApiKeysMenu
               apiKeys={apiKeysData}

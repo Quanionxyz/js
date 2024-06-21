@@ -85,6 +85,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
             position={{ base: "absolute", md: "relative" }}
             maxH={{ base: openState.isOpen ? "100vh" : "0px", md: "100%" }}
             transition="max-height 0.2s ease-in-out"
+            bg="backgroundBody"
             overflow={{ base: "hidden", md: "visible" }}
             w="full"
             mb={{ base: 3, md: 0 }}
@@ -125,7 +126,6 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
           right={0}
           left={0}
           backdropFilter={openState.isOpen ? "blur(5px)" : undefined}
-          transition="backdrop-filter 0.2s ease-in-out"
         />
       </>
     </SideBarTunnel>

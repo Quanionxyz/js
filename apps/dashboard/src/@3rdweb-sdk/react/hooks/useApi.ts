@@ -782,7 +782,7 @@ export function useApiKeys() {
       }
       return json.data as ApiKey[];
     },
-    { enabled: !!user?.address && isLoggedIn },
+    { enabled: !!user?.address && isLoggedIn, refetchOnWindowFocus: false },
   );
 }
 
