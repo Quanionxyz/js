@@ -130,7 +130,7 @@ function RenderData(props: {
             </TableHeadingRow>
           </thead>
           <tbody>
-            {props.data ? (
+            {props.data && !props.isLoadingMore ? (
               <>
                 {props.data.purchases.map((purchase) => {
                   return (
