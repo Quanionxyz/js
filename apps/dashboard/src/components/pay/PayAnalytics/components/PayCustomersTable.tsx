@@ -37,7 +37,7 @@ export function PayCustomersTable(props: {
   to: Date;
 }) {
   const [type, setType] = useState<"top-customers" | "new-customers">(
-    "new-customers",
+    "top-customers",
   );
 
   const topCustomersQuery = usePayCustomers({
