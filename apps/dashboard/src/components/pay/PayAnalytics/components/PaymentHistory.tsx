@@ -16,6 +16,7 @@ import {
   NoDataAvailable,
   TableData,
   TableHeading,
+  TableHeadingRow,
 } from "./common";
 
 type UIData = {
@@ -102,19 +103,19 @@ function RenderData(props: {
 }) {
   return (
     <ScrollShadow
-      scrollableClassName="max-h-[350px] lg:max-h-[700px]"
+      scrollableClassName="max-h-[350px] lg:max-h-[700px] rounded-lg"
       disableTopShadow={true}
     >
       <table className="w-full selection:bg-muted">
         <thead>
-          <tr className="border-b border-border sticky top-0 bg-background z-10">
+          <TableHeadingRow>
             <TableHeading> Bought </TableHeading>
             <TableHeading> Paid </TableHeading>
             <TableHeading>Type</TableHeading>
             <TableHeading>Status</TableHeading>
             <TableHeading>Recipient</TableHeading>
             <TableHeading>Date</TableHeading>
-          </tr>
+          </TableHeadingRow>
         </thead>
         <tbody>
           {props.data ? (

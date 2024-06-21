@@ -12,7 +12,7 @@ import {
 
 export function NoDataAvailable() {
   return (
-    <div className="h-[250px] flex items-center justify-center">
+    <div className="min-h-[250px] flex items-center justify-center flex-1">
       <div className="flex items-center gap-2">
         <OctagonXIcon className="size-5 text-destructive-foreground" />
         <p className="text-muted-foreground">No data available</p>
@@ -53,12 +53,21 @@ export function ChangeBadge(props: { percent: number }) {
 }
 
 export function TableData({ children }: { children: React.ReactNode }) {
-  return <td className="px-0 py-2 text-sm">{children}</td>;
+  return <td className="px-3 py-2 text-sm">{children}</td>;
+}
+
+export function TableHeadingRow({ children }: { children: React.ReactNode }) {
+  return (
+    <tr className="sticky top-0 bg-background z-10">
+      {children}
+      <div className="border-b border-border absolute inset-0 z-10" />
+    </tr>
+  );
 }
 
 export function TableHeading(props: { children: React.ReactNode }) {
   return (
-    <th className="text-left px-0 py-3 text-sm font-medium text-muted-foreground min-w-[150px]">
+    <th className="bg-secondary border-b border-border text-left px-3 py-3 text-sm font-medium text-muted-foreground min-w-[150px]">
       {props.children}
     </th>
   );

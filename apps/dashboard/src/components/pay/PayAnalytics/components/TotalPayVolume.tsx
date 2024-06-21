@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { format } from "date-fns";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { AreaChartLoadingState } from "../../../analytics/area-chart";
 import { type PayVolumeData, usePayVolume } from "../hooks/usePayVolume";
@@ -26,8 +26,23 @@ export function TotalPayVolume(props: {
   clientId: string;
   from: Date;
   to: Date;
+  numberOfDays: number;
 }) {
-  const [intervalType, setIntervalType] = useState<"day" | "week">("day");
+  const [intervalType, setIntervalType] = useState<"day" | "week">(
+    props.numberOfDays > 30 ? "week" : "day",
+  );
+
+  // if prop changes, update intervalType
+  // eslint-disable-next-line no-restricted-syntax
+  useEffect(() => {
+    setIntervalType(props.numberOfDays > 30 ? "week" : "day");
+  }, [props.numberOfDays]);
+
+  // if prop changes, update intervalType
+  // eslint-disable-next-line no-restricted-syntax
+  useEffect(() => {
+    setIntervalType(props.numberOfDays > 30 ? "week" : "day");
+  }, [props.numberOfDays]);
 
   const volumeQuery = usePayVolume({
     clientId: props.clientId,

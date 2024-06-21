@@ -55,6 +55,10 @@ export function PayAnalytics(props: { apiKey: ApiKey }) {
     getLastNDaysRange("last-120"),
   );
 
+  const numberOfDays = Math.round(
+    (range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
   return (
     <div>
       <div className="flex mb-2">
@@ -69,12 +73,22 @@ export function PayAnalytics(props: { apiKey: ApiKey }) {
               to={range.to}
             />
           </div>
-          <TotalPayVolume clientId={clientId} from={range.from} to={range.to} />
+          <TotalPayVolume
+            clientId={clientId}
+            from={range.from}
+            to={range.to}
+            numberOfDays={numberOfDays}
+          />
         </GridWithSeparator>
 
         <div className="grid gap-4 grid-cols-1 xl:grid-cols-2 ">
           <div className="border border-border rounded-xl p-4 xl:p-6">
-            <Payouts clientId={clientId} from={range.from} to={range.to} />
+            <Payouts
+              clientId={clientId}
+              from={range.from}
+              to={range.to}
+              numberOfDays={numberOfDays}
+            />
           </div>
           <div className="border border-border rounded-xl p-4 xl:p-6 flex ">
             <PaymentsSuccessRate
@@ -91,6 +105,7 @@ export function PayAnalytics(props: { apiKey: ApiKey }) {
               clientId={clientId}
               from={range.from}
               to={range.to}
+              numberOfDays={numberOfDays}
             />
           </div>
           <PayCustomersTable

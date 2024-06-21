@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 import { AreaChartLoadingState } from "../../../analytics/area-chart";
@@ -24,8 +24,22 @@ type UIQueryData = {
   percentChange: number;
 };
 
-export function Payouts(props: { clientId: string; from: Date; to: Date }) {
-  const [intervalType, setIntervalType] = useState<"day" | "week">("day");
+export function Payouts(props: {
+  clientId: string;
+  from: Date;
+  to: Date;
+  numberOfDays: number;
+}) {
+  const [intervalType, setIntervalType] = useState<"day" | "week">(
+    props.numberOfDays > 30 ? "week" : "day",
+  );
+
+  // if prop changes, update intervalType
+  // eslint-disable-next-line no-restricted-syntax
+  useEffect(() => {
+    setIntervalType(props.numberOfDays > 30 ? "week" : "day");
+  }, [props.numberOfDays]);
+
   const payoutsQuery = usePayVolume({
     clientId: props.clientId,
     from: props.from,

@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
 import { AreaChartLoadingState } from "../../../analytics/area-chart";
@@ -27,8 +27,18 @@ export function PayNewCustomers(props: {
   clientId: string;
   from: Date;
   to: Date;
+  numberOfDays: number;
 }) {
-  const [intervalType, setIntervalType] = useState<"day" | "week">("day");
+  const [intervalType, setIntervalType] = useState<"day" | "week">(
+    props.numberOfDays > 30 ? "week" : "day",
+  );
+
+  // if prop changes, update intervalType
+  // eslint-disable-next-line no-restricted-syntax
+  useEffect(() => {
+    setIntervalType(props.numberOfDays > 30 ? "week" : "day");
+  }, [props.numberOfDays]);
+
   const newCustomersQuery = usePayNewCustomers({
     clientId: props.clientId,
     from: props.from,
@@ -82,12 +92,12 @@ export function PayNewCustomers(props: {
       <div className="flex justify-between gap-2 items-center mb-1">
         <CardHeading>New Customers </CardHeading>
 
-        {uiData.data && (
+        <div className={!uiData.data ? "invisible" : ""}>
           <IntervalSelector
             intervalType={intervalType}
             setIntervalType={setIntervalType}
           />
-        )}
+        </div>
       </div>
 
       {/* Chart */}

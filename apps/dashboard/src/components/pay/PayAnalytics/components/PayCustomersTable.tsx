@@ -8,7 +8,12 @@ import {
   usePayCustomers,
 } from "../hooks/usePayCustomers";
 import { ExportToCSVButton } from "./ExportToCSVButton";
-import { NoDataAvailable, TableData, TableHeading } from "./common";
+import {
+  NoDataAvailable,
+  TableData,
+  TableHeading,
+  TableHeadingRow,
+} from "./common";
 
 import {
   Select,
@@ -78,7 +83,7 @@ export function PayCustomersTable(props: {
   const customersData = uiData.data?.customers;
 
   return (
-    <div>
+    <div className="flex flex-col">
       {/* header */}
       <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:items-center">
         <Select
@@ -109,15 +114,16 @@ export function PayCustomersTable(props: {
         )}
       </div>
 
-      <div className="h-5" />
-
       {!uiData.isError ? (
-        <RenderData
-          data={uiData.data}
-          loadMore={() => {
-            topCustomersQuery.fetchNextPage();
-          }}
-        />
+        <>
+          <div className="h-5" />
+          <RenderData
+            data={uiData.data}
+            loadMore={() => {
+              topCustomersQuery.fetchNextPage();
+            }}
+          />
+        </>
       ) : (
         <NoDataAvailable />
       )}
@@ -130,10 +136,10 @@ function RenderData(props: { data?: UIData; loadMore: () => void }) {
     <ScrollShadow scrollableClassName="h-[250px]" disableTopShadow={true}>
       <table className="w-full">
         <thead>
-          <tr className="border-b border-border sticky top-0 bg-background z-10">
+          <TableHeadingRow>
             <TableHeading> Wallet Address </TableHeading>
             <TableHeading> Total spend </TableHeading>
-          </tr>
+          </TableHeadingRow>
         </thead>
         <tbody>
           {props.data ? (
