@@ -9,7 +9,7 @@ export function ExportToCSVButton(props: {
   fileName: string;
 }) {
   const exportMutation = useMutation({
-    onMutate: async () => {
+    mutationFn: async () => {
       const data = await props.getData();
       exportToCSV(props.fileName, data);
     },
