@@ -15,6 +15,7 @@ import {
 } from "../../../core/design-system/index.js";
 // import { localWalletMetadata } from "../../../../wallets/local/index._ts";
 import { useConnectUI } from "../../../core/hooks/others/useWalletConnectionCtx.js";
+import { genericWalletIcon } from "../../../core/utils/socialIcons.js";
 import { sortWallets } from "../../utils/sortWallets.js";
 import { LoadingScreen } from "../../wallets/shared/LoadingScreen.js";
 import { Img } from "../components/Img.js";
@@ -38,7 +39,6 @@ import { PoweredByThirdweb } from "./PoweredByTW.js";
 import { WalletButton, WalletEntryButton } from "./WalletEntryButton.js";
 import { WalletTypeRowButton } from "./WalletTypeRowButton.js";
 import { compactModalMaxHeight } from "./constants.js";
-import { genericWalletIcon } from "./icons/dataUris.js";
 
 const InAppWalletSelectionUI = /* @__PURE__ */ lazy(
   () => import("../../wallets/in-app/InAppWalletSelectionUI.js"),
