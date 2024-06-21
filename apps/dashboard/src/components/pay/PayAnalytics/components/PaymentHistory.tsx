@@ -1,13 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+import { useState } from "react";
+import { PaginationButtons } from "../../../../@/components/pagination-buttons";
 import { CopyAddressButton } from "../../../../@/components/ui/CopyAddressButton";
 import { ScrollShadow } from "../../../../@/components/ui/ScrollShadow/ScrollShadow";
-import { Spinner } from "../../../../@/components/ui/Spinner/Spinner";
 import { Badge } from "../../../../@/components/ui/badge";
 import { Skeleton } from "../../../../@/components/ui/skeleton";
 import { cn } from "../../../../@/lib/utils";
 import {
   type PayPurchasesData,
+  getPayPurchases,
   usePayPurchases,
 } from "../hooks/usePayPurchases";
 import { ExportToCSVButton } from "./ExportToCSVButton";
@@ -21,19 +22,24 @@ import {
 
 type UIData = {
   purchases: PayPurchasesData["purchases"];
-  showLoadMore: boolean;
+  pages: number;
 };
+
+const pageSize = 10;
 
 export function PaymentHistory(props: {
   clientId: string;
   from: Date;
   to: Date;
 }) {
+  const [page, setPage] = useState(1);
+
   const purchasesQuery = usePayPurchases({
     clientId: props.clientId,
     from: props.from,
     to: props.to,
-    pageSize: 100,
+    start: (page - 1) * pageSize,
+    count: pageSize,
   });
 
   function getUIData(): {
@@ -48,9 +54,8 @@ export function PaymentHistory(props: {
       return { isError: true };
     }
 
-    const purchases = purchasesQuery.data.pages.flatMap(
-      (page) => page.pageData.purchases,
-    );
+    const purchases = purchasesQuery.data.purchases;
+    const totalCount = purchasesQuery.data.count;
 
     if (purchases.length === 0) {
       return { isError: true };
@@ -59,23 +64,30 @@ export function PaymentHistory(props: {
     return {
       data: {
         purchases,
-        showLoadMore: !!purchasesQuery.hasNextPage,
+        pages: Math.ceil(totalCount / pageSize),
       },
     };
   }
 
   const uiData = getUIData();
-  const purchases = uiData.data?.purchases;
 
   return (
     <div>
       <div className="flex flex-col lg:flex-row lg:justify-between gap-2 lg:items-center">
         <CardHeading> Transaction History</CardHeading>
-        {purchases && (
+        {!uiData.isError && (
           <ExportToCSVButton
             fileName="transaction_history"
-            getData={() => {
-              return getCSVData(purchases);
+            getData={async () => {
+              const purchaseData = await getPayPurchases({
+                clientId: props.clientId,
+                count: 10000,
+                from: props.from,
+                start: 0,
+                to: props.to,
+              });
+
+              return getCSVData(purchaseData.purchases);
             }}
           />
         )}
@@ -86,7 +98,8 @@ export function PaymentHistory(props: {
       {!uiData.isError ? (
         <RenderData
           data={uiData.data}
-          loadMore={() => purchasesQuery.fetchNextPage()}
+          activePage={page}
+          setPage={setPage}
           isLoadingMore={purchasesQuery.isFetching}
         />
       ) : (
@@ -98,67 +111,53 @@ export function PaymentHistory(props: {
 
 function RenderData(props: {
   data?: UIData;
-  loadMore: () => void;
   isLoadingMore: boolean;
+  activePage: number;
+  setPage: (page: number) => void;
 }) {
   return (
-    <ScrollShadow
-      scrollableClassName="max-h-[350px] lg:max-h-[700px] rounded-lg"
-      disableTopShadow={true}
-    >
-      <table className="w-full selection:bg-muted">
-        <thead>
-          <TableHeadingRow>
-            <TableHeading> Bought </TableHeading>
-            <TableHeading> Paid </TableHeading>
-            <TableHeading>Type</TableHeading>
-            <TableHeading>Status</TableHeading>
-            <TableHeading>Recipient</TableHeading>
-            <TableHeading>Date</TableHeading>
-          </TableHeadingRow>
-        </thead>
-        <tbody>
-          {props.data ? (
-            <>
-              {props.data.purchases.map((purchase) => {
-                return (
-                  <TableRow key={purchase.purchaseId} purchase={purchase} />
-                );
-              })}
-            </>
-          ) : (
-            <>
-              {new Array(20).fill(0).map((_, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: ok
-                <SkeletonTableRow key={i} rowIndex={i} />
-              ))}
-            </>
-          )}
-        </tbody>
-      </table>
+    <div>
+      <ScrollShadow>
+        <table className="w-full selection:bg-inverted selection:text-inverted-foreground ">
+          <thead>
+            <TableHeadingRow>
+              <TableHeading> Bought </TableHeading>
+              <TableHeading> Paid </TableHeading>
+              <TableHeading>Type</TableHeading>
+              <TableHeading>Status</TableHeading>
+              <TableHeading>Recipient</TableHeading>
+              <TableHeading>Date</TableHeading>
+            </TableHeadingRow>
+          </thead>
+          <tbody>
+            {props.data ? (
+              <>
+                {props.data.purchases.map((purchase) => {
+                  return (
+                    <TableRow key={purchase.purchaseId} purchase={purchase} />
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {new Array(pageSize).fill(0).map((_, i) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: ok
+                  <SkeletonTableRow key={i} />
+                ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </ScrollShadow>
 
-      {props.data && (
-        <>
-          {props.data?.showLoadMore ? (
-            <div className="flex justify-center py-3">
-              <Button
-                className="text-sm text-link-foreground p-2 h-auto gap-2 items-center"
-                variant="ghost"
-                onClick={props.loadMore}
-                disabled={props.isLoadingMore}
-              >
-                {props.isLoadingMore ? "Loading" : "View More"}
-                {props.isLoadingMore && <Spinner className="size-3" />}
-              </Button>
-            </div>
-          ) : (
-            <p className="text-center py-5 text-muted-foreground">
-              No more transactions
-            </p>
-          )}
-        </>
-      )}
-    </ScrollShadow>
+      <div className="h-8" />
+
+      <PaginationButtons
+        activePage={props.activePage}
+        totalPages={props.data?.pages || 5}
+        onPageClick={props.setPage}
+      />
+    </div>
   );
 }
 
@@ -230,24 +229,27 @@ function TableRow(props: { purchase: PayPurchasesData["purchases"][0] }) {
   );
 }
 
-function SkeletonTableRow(props: { rowIndex: number }) {
-  const skeleton = (
-    <Skeleton
-      className="h-7 w-20"
-      style={{
-        animationDelay: `${props.rowIndex * 0.1}s`,
-      }}
-    />
-  );
-
+function SkeletonTableRow() {
   return (
     <tr className="border-b border-border">
-      <TableData>{skeleton}</TableData>
-      <TableData>{skeleton}</TableData>
-      <TableData>{skeleton}</TableData>
-      <TableData>{skeleton}</TableData>
-      <TableData>{skeleton}</TableData>
-      <TableData>{skeleton}</TableData>
+      <TableData>
+        <Skeleton className="h-7 w-20" />
+      </TableData>
+      <TableData>
+        <Skeleton className="h-7 w-20" />
+      </TableData>
+      <TableData>
+        <Skeleton className="h-7 w-20 rounded-2xl" />
+      </TableData>
+      <TableData>
+        <Skeleton className="h-7 w-20 rounded-2xl" />
+      </TableData>
+      <TableData>
+        <Skeleton className="h-7 w-[140px]" />
+      </TableData>
+      <TableData>
+        <Skeleton className="h-7 w-[200px]" />
+      </TableData>
     </tr>
   );
 }

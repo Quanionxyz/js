@@ -1,4 +1,3 @@
-import "@/styles/globals.css";
 import { ChakraProvider, useColorMode } from "@chakra-ui/react";
 import { Global, css } from "@emotion/react";
 import type { DehydratedState } from "@tanstack/react-query";
@@ -22,7 +21,9 @@ import { generateBreakpointTypographyCssVars } from "tw-components/utils/typogra
 import type { ThirdwebNextPage } from "utils/types";
 import { ThemeProvider } from "../@/components/theme-provider";
 import "../css/swagger-ui.css";
+import { Toaster } from "@/components/ui/toaster";
 import chakraTheme from "../theme";
+import "@/styles/globals.css";
 
 const inter = interConstructor({
   subsets: ["latin"],
@@ -275,6 +276,7 @@ const ConsoleApp = memo(function ConsoleApp({
           {isFallback && Component.fallback
             ? Component.fallback
             : getLayout(<Component {...pageProps} />, pageProps)}
+          <Toaster />
         </TailwindTheme>
       </ChakraProvider>
     </PlausibleProvider>

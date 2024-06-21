@@ -107,7 +107,7 @@ export function PayCustomersTable(props: {
         {customersData && (
           <ExportToCSVButton
             fileName="top_customers"
-            getData={() => {
+            getData={async () => {
               return getCSVData(customersData);
             }}
           />

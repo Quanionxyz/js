@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { SkeletonContainer } from "../../../../@/components/ui/skeleton";
+import { ToolTipLabel } from "../../../../@/components/ui/tooltip";
 import { usePayVolume } from "../hooks/usePayVolume";
 import { CardHeading, NoDataAvailable } from "./common";
 
@@ -140,14 +141,18 @@ function RenderData(props: { data?: UIData }) {
 
 function Bar(props: { rate: number }) {
   return (
-    <div className="flex items-center">
-      <div
-        className="h-5 bg-success-foreground transition-all rounded-lg rounded-r-none border-r-0"
-        style={{
-          width: `${props.rate}%`,
-        }}
-      />
-      <div className="h-5 bg-destructive-foreground flex-1 transition-all rounded-lg rounded-l-none border-l-0" />
+    <div className="flex items-center gap-0.5">
+      <ToolTipLabel label="Succeeded">
+        <div
+          className="h-5 bg-success-foreground transition-all rounded-lg rounded-r-none border-r-0"
+          style={{
+            width: `${props.rate}%`,
+          }}
+        />
+      </ToolTipLabel>
+      <ToolTipLabel label="Failed">
+        <div className="h-5 bg-destructive-foreground flex-1 transition-all rounded-lg rounded-l-none border-l-0" />
+      </ToolTipLabel>
     </div>
   );
 }
