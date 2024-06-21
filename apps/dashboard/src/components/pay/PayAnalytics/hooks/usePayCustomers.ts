@@ -26,7 +26,7 @@ export function usePayCustomers(options: {
   const { user, isLoggedIn } = useLoggedInUser();
 
   return useInfiniteQuery({
-    queryKey: ["usePayTopCustomers", user?.address, options],
+    queryKey: ["usePayCustomers", user?.address, options],
     queryFn: async ({ pageParam = 0 }) => {
       const endpoint = new URL(
         options.type === "new-customers"
@@ -70,7 +70,7 @@ export function usePayCustomers(options: {
         nextPageIndex,
       };
     },
-    enabled: !!user?.address && isLoggedIn,
+    enabled: isLoggedIn,
     getNextPageParam: (lastPage) => {
       return lastPage.nextPageIndex;
     },

@@ -38,12 +38,6 @@ export function TotalPayVolume(props: {
     setIntervalType(props.numberOfDays > 30 ? "week" : "day");
   }, [props.numberOfDays]);
 
-  // if prop changes, update intervalType
-  // eslint-disable-next-line no-restricted-syntax
-  useEffect(() => {
-    setIntervalType(props.numberOfDays > 30 ? "week" : "day");
-  }, [props.numberOfDays]);
-
   const volumeQuery = usePayVolume({
     clientId: props.clientId,
     from: props.from,
@@ -79,30 +73,39 @@ function RenderData(props: {
     (x) => {
       const date = format(new Date(x.interval), "LLL dd");
 
-      if (type === "crypto") {
-        return {
-          date,
-          value:
-            x.buyWithCrypto[successType === "success" ? "succeeded" : "failed"]
-              .amountUSDCents / 100,
-        };
-      }
+      switch (type) {
+        case "crypto": {
+          return {
+            date,
+            value:
+              x.buyWithCrypto[
+                successType === "success" ? "succeeded" : "failed"
+              ].amountUSDCents / 100,
+          };
+        }
 
-      if (type === "fiat") {
-        return {
-          date,
-          value:
-            x.buyWithFiat[successType === "success" ? "succeeded" : "failed"]
-              .amountUSDCents / 100,
-        };
-      }
+        case "fiat": {
+          return {
+            date,
+            value:
+              x.buyWithFiat[successType === "success" ? "succeeded" : "failed"]
+                .amountUSDCents / 100,
+          };
+        }
 
-      return {
-        date,
-        value:
-          x.sum[successType === "success" ? "succeeded" : "failed"]
-            .amountUSDCents / 100,
-      };
+        case "all": {
+          return {
+            date,
+            value:
+              x.sum[successType === "success" ? "succeeded" : "failed"]
+                .amountUSDCents / 100,
+          };
+        }
+
+        default: {
+          throw new Error("Invalid tab");
+        }
+      }
     },
   );
 

@@ -67,7 +67,7 @@ export function usePayPurchases(options: PayPurcaseOptions) {
   return useQuery({
     queryKey: ["usePayPurchases", user?.address, options],
     queryFn: async () => getPayPurchases(options),
-    enabled: !!user?.address && isLoggedIn,
+    enabled: isLoggedIn,
     keepPreviousData: true,
   });
 }

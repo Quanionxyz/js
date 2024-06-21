@@ -144,7 +144,7 @@ function usePayConfig() {
     setSelectedKey,
     apiKeysData,
     hasApiKeys: !!keysQuery.data?.length,
-    isFetchingKeys: keysQuery.isFetching,
+    isFetchingKeys: keysQuery.isFetching && !keysQuery.isRefetching,
   };
 }
 

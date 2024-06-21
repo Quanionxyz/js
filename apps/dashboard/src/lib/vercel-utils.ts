@@ -1,6 +1,11 @@
 import { setThirdwebDomains } from "thirdweb/utils";
 import { isBrowser } from "utils/isBrowser";
-import { THIRDWEB_PAY_DOMAIN } from "../constants/urls";
+import {
+  THIRDWEB_INAPP_WALLET_DOMAIN,
+  THIRDWEB_PAY_DOMAIN,
+  THIRDWEB_RPC_DOMAIN,
+  THIRDWEB_STORAGE_DOMAIN,
+} from "../constants/urls";
 
 function getVercelEnv() {
   const onVercel = process.env.vercel || process.env.NEXT_PUBLIC_VERCEL_ENV;
@@ -54,12 +59,10 @@ function setOverrides() {
   */
 
   setThirdwebDomains({
-    rpc: process.env.NEXT_PUBLIC_RPC_URL || "rpc.thirdweb-dev.com",
-    inAppWallet:
-      process.env.NEXT_PUBLIC_IN_APP_WALLET_URL ||
-      "embedded-wallet.thirdweb-dev.com",
+    rpc: THIRDWEB_RPC_DOMAIN,
+    inAppWallet: THIRDWEB_INAPP_WALLET_DOMAIN,
     pay: THIRDWEB_PAY_DOMAIN,
-    storage: process.env.NEXT_PUBLIC_STORAGE_URL || "storage.thirdweb-dev.com",
+    storage: THIRDWEB_STORAGE_DOMAIN,
   });
 }
 

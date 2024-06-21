@@ -37,7 +37,6 @@ export function useHeightObserver() {
   const elementRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | undefined>();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: ok
   useLayoutEffect(() => {
     const element = elementRef.current;
     if (!element) {
@@ -53,7 +52,7 @@ export function useHeightObserver() {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [elementRef]);
+  }, []);
 
   return { height, elementRef };
 }

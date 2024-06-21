@@ -90,6 +90,6 @@ export function usePayVolume(options: {
 
       return resJSON.result.data;
     },
-    { enabled: !!user?.address && isLoggedIn, retry: false },
+    { enabled: isLoggedIn, retry: false },
   );
 }

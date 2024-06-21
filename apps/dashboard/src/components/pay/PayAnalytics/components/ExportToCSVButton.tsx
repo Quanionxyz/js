@@ -1,14 +1,32 @@
+import { Spinner } from "@/components/ui/Spinner/Spinner";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
 import { DownloadIcon } from "lucide-react";
-import { useState } from "react";
-import { Spinner } from "../../../../@/components/ui/Spinner/Spinner";
-import { Button } from "../../../../@/components/ui/button";
 
 export function ExportToCSVButton(props: {
   getData: () => Promise<{ header: string[]; rows: string[][] }>;
   fileName: string;
 }) {
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const exportMutation = useMutation({
+    onMutate: async () => {
+      const data = await props.getData();
+      exportToCSV(props.fileName, data);
+    },
+    onError: () => {
+      toast({
+        title: "Failed to download CSV",
+        variant: "destructive",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Exported Successfully",
+        description: "CSV file has been downloaded",
+      });
+    },
+  });
+
   const { toast } = useToast();
 
   return (
@@ -16,25 +34,10 @@ export function ExportToCSVButton(props: {
       variant="outline"
       className="border flex gap-2 items-center text-xs"
       onClick={async () => {
-        setStatus("loading");
-        try {
-          const data = await props.getData();
-          exportToCSV(props.fileName, data);
-          setStatus("idle");
-          toast({
-            title: "Exported Successfully",
-            description: "CSV file has been downloaded",
-          });
-        } catch {
-          toast({
-            title: "Failed to download CSV",
-            variant: "destructive",
-          });
-          setStatus("error");
-        }
+        exportMutation.mutate();
       }}
     >
-      {status === "loading" ? (
+      {exportMutation.isLoading ? (
         <>
           Downloading
           <Spinner className="size-3" />

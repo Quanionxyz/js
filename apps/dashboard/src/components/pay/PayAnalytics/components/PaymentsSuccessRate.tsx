@@ -45,35 +45,44 @@ export function PaymentsSuccessRate(props: {
     }
 
     const aggregated = volumeQuery.data.aggregate;
-    let data: UIData;
 
-    if (type === "all") {
-      const succeeded = aggregated.sum.succeeded.count;
-      const failed = aggregated.sum.failed.count;
-      const total = succeeded + failed;
-      const rate = (succeeded / (succeeded + failed)) * 100;
-      data = { succeeded, failed, rate, total };
-    } else if (type === "crypto") {
-      const succeeded = aggregated.buyWithCrypto.succeeded.count;
-      const failed = aggregated.buyWithCrypto.failed.count;
-      const total = succeeded + failed;
-      const rate = (succeeded / (succeeded + failed)) * 100;
-      data = { succeeded, failed, rate, total };
-    } else if (type === "fiat") {
-      const succeeded = aggregated.buyWithFiat.succeeded.count;
-      const failed = aggregated.buyWithFiat.failed.count;
-      const total = succeeded + failed;
-      const rate = (succeeded / (succeeded + failed)) * 100;
-      data = { succeeded, failed, rate, total };
-    } else {
-      throw new Error("Invalid tab");
+    let succeeded = 0;
+    let failed = 0;
+
+    switch (type) {
+      case "all": {
+        succeeded = aggregated.sum.succeeded.count;
+        failed = aggregated.sum.failed.count;
+        break;
+      }
+
+      case "crypto": {
+        succeeded = aggregated.buyWithCrypto.succeeded.count;
+        failed = aggregated.buyWithCrypto.failed.count;
+        break;
+      }
+
+      case "fiat": {
+        succeeded = aggregated.buyWithFiat.succeeded.count;
+        failed = aggregated.buyWithFiat.failed.count;
+        break;
+      }
+
+      default: {
+        throw new Error("Invalid tab");
+      }
     }
 
-    if (data.total === 0) {
+    const total = succeeded + failed;
+
+    if (total === 0) {
       return {
         isError: true,
       };
     }
+
+    const rate = (succeeded / (succeeded + failed)) * 100;
+    const data = { succeeded, failed, rate, total };
 
     return { data };
   }

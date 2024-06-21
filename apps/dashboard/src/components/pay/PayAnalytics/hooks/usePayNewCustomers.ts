@@ -59,6 +59,6 @@ export function usePayNewCustomers(options: {
 
       return resJSON.result.data;
     },
-    { enabled: !!user?.address && isLoggedIn },
+    { enabled: isLoggedIn },
   );
 }
