@@ -1,7 +1,9 @@
 type CustomToolTipProps = {
   valueLabel: string;
   active?: boolean;
+  // biome-ignore lint/suspicious/noExplicitAny: FIXME
   payload?: any;
+  // biome-ignore lint/suspicious/noExplicitAny: FIXME
   valueFormatter?: (value: any) => string;
 };
 

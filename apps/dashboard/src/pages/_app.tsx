@@ -160,7 +160,7 @@ const ConsoleAppWrapper: React.FC<AppPropsWithLayout> = ({
   }, [pageId]);
 
   const canonicalUrl = useMemo(() => {
-    const base = `https://thirdweb.com`;
+    const base = "https://thirdweb.com";
     // replace all re-written middleware paths
     const path = router.asPath
       .replace("/evm/", "/")

@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import { ChainIcon } from "../../../components/server/chain-icon";
 import { products } from "../../../components/server/products";
-import { ChainSupportedService } from "../../../types/chain";
+import type { ChainSupportedService } from "../../../types/chain";
 import { getChainMetadata } from "../../../utils";
 
 type ChainListRowProps = {

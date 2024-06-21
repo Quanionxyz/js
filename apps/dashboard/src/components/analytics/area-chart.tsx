@@ -59,9 +59,7 @@ const AreaChart = <
     return null;
   }
 
-  if (!index.type) {
-    index.type = "date";
-  }
+  const indexType = index.type || "date";
 
   return (
     <div className={cn("h-full w-full", className)}>
@@ -135,7 +133,7 @@ const AreaChart = <
             tickFormatter={(payload) =>
               index.format
                 ? index.format(payload)
-                : index.type === "date"
+                : indexType === "date"
                   ? new Date(payload).toLocaleDateString(undefined, {
                       day: "numeric",
                       month: "short",

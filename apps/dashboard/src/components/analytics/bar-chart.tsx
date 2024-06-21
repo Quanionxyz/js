@@ -1,5 +1,4 @@
 import { useTheme } from "next-themes";
-import { CustomToolTip } from "./custom-tooltip";
 import { useId, useMemo } from "react";
 import {
   Bar,
@@ -9,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { CustomToolTip } from "./custom-tooltip";
 
 type GenericDataType = Record<string, string | number>;
 
@@ -62,9 +62,7 @@ export const BarChart = <
     return null;
   }
 
-  if (!index.type) {
-    index.type = "date";
-  }
+  const indexType = index.type || "date";
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -141,8 +139,11 @@ export const BarChart = <
                   })
                 : payload
           }
-          className="font-sans text-xs"
-          stroke="hsl(var(--muted-foreground))"
+          style={{
+            fontSize: "12px",
+            fontFamily: "var(--chakra-fonts-body)",
+          }}
+          stroke="var(--chakra-colors-paragraph)"
           tickLine={false}
           axisLine={false}
           interval="preserveStartEnd"

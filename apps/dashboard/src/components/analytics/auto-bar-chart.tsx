@@ -1,5 +1,4 @@
 import { useTheme } from "next-themes";
-import { StackToolTip } from "./stack-tooltip";
 import { useId, useMemo, useState } from "react";
 import {
   Bar,
@@ -9,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { StackToolTip } from "./stack-tooltip";
 
 type GenericDataType = Record<string, string | number>;
 
@@ -96,6 +96,7 @@ export const AutoBarChart = <
 
   const categories = useMemo(() => {
     const autoKeys: string[] = [];
+    // biome-ignore lint/complexity/noForEach: FIXME
     data.forEach((item) => {
       for (const key of Object.keys(item)) {
         if (key === index.id) {
@@ -115,9 +116,7 @@ export const AutoBarChart = <
     }));
   }, [data, index.id, barColors]);
 
-  if (!index.type) {
-    index.type = "date";
-  }
+  const indexType = index.type || "date";
 
   const sortedData = useMemo(() => {
     return [...data].sort(
@@ -213,8 +212,11 @@ export const AutoBarChart = <
                   })
                 : payload
           }
-          className="text-xs font-sans"
-          stroke="hsl(var(--muted-foreground))"
+          style={{
+            fontSize: "12px",
+            fontFamily: "var(--chakra-fonts-body)",
+          }}
+          stroke="var(--chakra-colors-paragraph)"
           tickLine={false}
           axisLine={false}
           interval="preserveStartEnd"
