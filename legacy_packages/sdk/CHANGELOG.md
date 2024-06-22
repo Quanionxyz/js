@@ -1,5 +1,23 @@
 # @thirdweb-dev/sdk
 
+## 4.0.100
+
+### Patch Changes
+
+- [#3424](https://github.com/thirdweb-dev/js/pull/3424) [`6abdb45`](https://github.com/thirdweb-dev/js/commit/6abdb45f6aa34ef32b8a267d94963a4cc854c697) Thanks [@kumaryash90](https://github.com/kumaryash90)! - Override contract publish id on CLI
+
+- [#3428](https://github.com/thirdweb-dev/js/pull/3428) [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72) Thanks [@jnsdls](https://github.com/jnsdls)! - update dependencies
+
+- [#3443](https://github.com/thirdweb-dev/js/pull/3443) [`ea46c70`](https://github.com/thirdweb-dev/js/commit/ea46c70d7ae5132ac9df9c306c5c3cb1ba871a76) Thanks [@kumaryash90](https://github.com/kumaryash90)! - Fix EIP155 check for create2 factory deployment
+
+- Updated dependencies [[`fe77516`](https://github.com/thirdweb-dev/js/commit/fe775166d40fdd50faaa8d6da3fcd624f9a450ed), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`6429acc`](https://github.com/thirdweb-dev/js/commit/6429acc1f7d45e26bbbe501497df4fb0c3baa5b3), [`b24e9b2`](https://github.com/thirdweb-dev/js/commit/b24e9b23203a66915ba9e8b4a2d2b8aa17451135), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`a3a4008`](https://github.com/thirdweb-dev/js/commit/a3a4008831ca9c34cafe461cd4ca2c07941d1564), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`ea46c70`](https://github.com/thirdweb-dev/js/commit/ea46c70d7ae5132ac9df9c306c5c3cb1ba871a76), [`b24e9b2`](https://github.com/thirdweb-dev/js/commit/b24e9b23203a66915ba9e8b4a2d2b8aa17451135), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72)]:
+  - thirdweb@5.30.0
+  - @thirdweb-dev/merkletree@0.2.7
+  - @thirdweb-dev/storage@2.0.16
+  - @thirdweb-dev/chains@0.1.121
+  - @thirdweb-dev/crypto@0.2.7
+  - @thirdweb-dev/contracts-js@1.3.23
+
 ## 4.0.99
 
 ### Patch Changes

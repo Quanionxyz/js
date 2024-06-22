@@ -1,5 +1,14 @@
 # @thirdweb-dev/storage
 
+## 2.0.16
+
+### Patch Changes
+
+- [#3428](https://github.com/thirdweb-dev/js/pull/3428) [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72) Thanks [@jnsdls](https://github.com/jnsdls)! - update dependencies
+
+- Updated dependencies [[`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72)]:
+  - @thirdweb-dev/crypto@0.2.7
+
 ## 2.0.15
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # thirdweb
 
+## 0.14.13
+
+### Patch Changes
+
+- [#3424](https://github.com/thirdweb-dev/js/pull/3424) [`6abdb45`](https://github.com/thirdweb-dev/js/commit/6abdb45f6aa34ef32b8a267d94963a4cc854c697) Thanks [@kumaryash90](https://github.com/kumaryash90)! - Override contract publish id on CLI
+
+- [#3428](https://github.com/thirdweb-dev/js/pull/3428) [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72) Thanks [@jnsdls](https://github.com/jnsdls)! - update dependencies
+
+- Updated dependencies [[`6abdb45`](https://github.com/thirdweb-dev/js/commit/6abdb45f6aa34ef32b8a267d94963a4cc854c697), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72), [`ea46c70`](https://github.com/thirdweb-dev/js/commit/ea46c70d7ae5132ac9df9c306c5c3cb1ba871a76), [`fab5cd4`](https://github.com/thirdweb-dev/js/commit/fab5cd43bed972b0a3f70f0f39a790349672ba72)]:
+  - @thirdweb-dev/sdk@4.0.100
+  - @thirdweb-dev/storage@2.0.16
+  - @thirdweb-dev/wallets@2.5.40
+  - @thirdweb-dev/chains@0.1.121
+  - @thirdweb-dev/auth@4.1.98
+
 ## 0.14.12
 
 ### Patch Changes
