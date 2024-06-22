@@ -6,22 +6,10 @@ export default {
     {
       "name": "gmmtscan",
       "url": "https://scan.gmmtchain.io",
-      "standard": "EIP3091",
-      "icon": {
-        "url": "ipfs://QmVth4aPeskDTFqRifUugJx6gyEHCmx2PFbMWUtsCSQFkF",
-        "width": 468,
-        "height": 518,
-        "format": "png"
-      }
+      "standard": "EIP3091"
     }
   ],
   "faucets": [],
-  "icon": {
-    "url": "ipfs://QmVth4aPeskDTFqRifUugJx6gyEHCmx2PFbMWUtsCSQFkF",
-    "width": 468,
-    "height": 518,
-    "format": "png"
-  },
   "infoURL": "https://gmmtchain.io/",
   "name": "Giant Mammoth Mainnet",
   "nativeCurrency": {

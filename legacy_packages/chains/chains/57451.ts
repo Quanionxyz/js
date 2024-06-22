@@ -10,12 +10,6 @@ export default {
     }
   ],
   "faucets": [],
-  "icon": {
-    "url": "ipfs://QmeUyBe58BPndt6SpH9Tn1a8AYpNtHbMVhVyZt8Ppc4HTB",
-    "width": 200,
-    "height": 200,
-    "format": "svg"
-  },
   "infoURL": "https://explorer.coinsec.network/",
   "name": "COINSEC Network",
   "nativeCurrency": {
