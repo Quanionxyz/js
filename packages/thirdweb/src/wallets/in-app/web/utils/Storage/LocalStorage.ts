@@ -3,6 +3,7 @@ import {
   AUTH_TOKEN_LOCAL_STORAGE_NAME,
   DEVICE_SHARE_LOCAL_STORAGE_NAME,
   PASSKEY_CREDENTIAL_ID_LOCAL_STORAGE_NAME,
+  SESSION_TRANSACTIONS_LOCAL_STORAGE_NAME,
   WALLET_CONNECT_SESSIONS_LOCAL_STORAGE_NAME,
   WALLET_USER_ID_LOCAL_STORAGE_NAME,
 } from "../../../core/constants/settings.js";
@@ -21,7 +22,10 @@ export class LocalStorage {
   constructor({
     clientId,
     ecosystemId,
-  }: { clientId: string; ecosystemId?: EcosystemWalletId }) {
+  }: {
+    clientId: string;
+    ecosystemId?: EcosystemWalletId;
+  }) {
     this.isSupported = typeof window !== "undefined" && !!window.localStorage;
     this.key = getLocalStorageKey(clientId, ecosystemId);
   }
@@ -47,6 +51,25 @@ export class LocalStorage {
       return true;
     }
     return false;
+  }
+
+  /**
+   * @internal
+   */
+  async getSessionTransactions(): Promise<string | null> {
+    return this.getItem(SESSION_TRANSACTIONS_LOCAL_STORAGE_NAME(this.key));
+  }
+
+  /**
+   * @internal
+   */
+  async saveSessionTransactions(
+    stringifiedTransactions: string,
+  ): Promise<void> {
+    this.setItem(
+      SESSION_TRANSACTIONS_LOCAL_STORAGE_NAME(this.key),
+      stringifiedTransactions,
+    );
   }
 
   /**

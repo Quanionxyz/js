@@ -55,6 +55,7 @@ export {
   toSerializableTransaction,
   type ToSerializableTransactionOptions,
 } from "../transaction/actions/to-serializable-transaction.js";
+export { getSessionTransactions } from "../transaction/transaction-store.js";
 
 //types & utils
 export {

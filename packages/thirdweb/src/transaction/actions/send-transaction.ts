@@ -1,5 +1,6 @@
 import type { Account } from "../../wallets/interfaces/wallet.js";
 import type { PreparedTransaction } from "../prepare-transaction.js";
+import { addTransactionToSession } from "../transaction-store.js";
 import type { GaslessOptions } from "./gasless/types.js";
 import { toSerializableTransaction } from "./to-serializable-transaction.js";
 import type { WaitForReceiptOptions } from "./wait-for-tx-receipt.js";
@@ -57,5 +58,12 @@ export async function sendTransaction(
   }
 
   const result = await account.sendTransaction(serializableTransaction);
+  // Store the transaction
+  addTransactionToSession({
+    account,
+    transactionHash: result.transactionHash,
+    chain: transaction.chain,
+    client: transaction.client,
+  });
   return { ...result, chain: transaction.chain, client: transaction.client };
 }
